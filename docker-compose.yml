@@ -6,6 +6,8 @@ services:
     image: postgres
     volumes: 
       - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" #TODO for debug only
     environment: 
       - POSTGRES_USER=inspector
       - POSTGRES_PASSWORD=inspector #TODO Remove into .env file !
