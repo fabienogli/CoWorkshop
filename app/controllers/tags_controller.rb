@@ -1,5 +1,7 @@
 class TagsController < ApplicationController
-# GET /tags
+
+  before_action :set_tag, only: [:show, :update, :destroy]
+  # GET /tags
   def index
     @tags = Tag.all
     json_response(@tags)
@@ -7,7 +9,9 @@ class TagsController < ApplicationController
 
   # POST /tags
   def create
+    p tag_params
     @tag = Tag.create!(tag_params)
+    
     json_response(@tag, :created)
   end
 
@@ -32,7 +36,7 @@ class TagsController < ApplicationController
 
   def tag_params
     # whitelist params
-    params.permit(:title, :created_by)
+    params.permit(:name, :created_by)
   end
 
   def set_tag
