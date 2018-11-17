@@ -12,9 +12,9 @@ services:
       - POSTGRES_USER=inspector
       - POSTGRES_PASSWORD=inspector #TODO Remove into .env file !
 
-  app:
+  backend:
     build:
-      context: .
+      context: ./server
       dockerfile: Dockerfile
     command: foreman start -f Procfile.dev -p 3000
     volumes:
