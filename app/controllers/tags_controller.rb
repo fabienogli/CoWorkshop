@@ -9,9 +9,7 @@ class TagsController < ApplicationController
 
   # POST /tags
   def create
-    p tag_params
     @tag = Tag.create!(tag_params)
-    
     json_response(@tag, :created)
   end
 
@@ -23,20 +21,20 @@ class TagsController < ApplicationController
   # PUT /tags/:id
   def update
     @tag.update(tag_params)
-    head :no_content
+    json_response(@tag)
   end
 
   # DELETE /tags/:id
   def destroy
     @tag.destroy
-    head :no_content
+    json_response(@tag)
   end
 
   private
 
   def tag_params
     # whitelist params
-    params.permit(:name, :created_by)
+    params.permit(:name)
   end
 
   def set_tag
