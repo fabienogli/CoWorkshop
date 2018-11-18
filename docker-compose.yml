@@ -16,9 +16,11 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    entrypoint: /project/entrypoint.sh
     command: foreman start -f Procfile.dev -p 3000
     volumes:
-      - .:/project
+      - ./server:/project
+      - ./server/entrypoint.sh:/project/entrypoint.sh
       - type: tmpfs
         target: /project/tmp/pids/
     ports:
