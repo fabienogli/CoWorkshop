@@ -6,5 +6,4 @@ RUN mkdir /project
 COPY Gemfile Gemfile.lock /project/
 WORKDIR /project
 RUN bundle install
-RUN rails db:create
 COPY . /project
