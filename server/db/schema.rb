@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_17_173204) do
+ActiveRecord::Schema.define(version: 2018_11_19_170928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,16 +19,19 @@ ActiveRecord::Schema.define(version: 2018_11_17_173204) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "tags_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "tag_id", null: false
+    t.index ["user_id", "tag_id"], name: "index_tags_users_on_user_id_and_tag_id", unique: true
   end
 
   create_table "tags_works", id: false, force: :cascade do |t|
     t.bigint "work_id", null: false
     t.bigint "tag_id", null: false
+    t.index ["work_id", "tag_id"], name: "index_tags_works_on_work_id_and_tag_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -38,11 +41,14 @@ ActiveRecord::Schema.define(version: 2018_11_17_173204) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["mail"], name: "index_users_on_mail", unique: true
+    t.index ["pseudo"], name: "index_users_on_pseudo", unique: true
   end
 
   create_table "users_works", id: false, force: :cascade do |t|
     t.bigint "work_id", null: false
     t.bigint "user_id", null: false
+    t.index ["work_id", "user_id"], name: "index_users_works_on_work_id_and_user_id", unique: true
   end
 
   create_table "works", force: :cascade do |t|
