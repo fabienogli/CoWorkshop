@@ -1,10 +1,15 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:show,
+                                  :update,
+                                  :destroy,
+                                  :create_tags,
+                                  :destroy_tags,
+  ]
 
   # GET /users
   def index
     @users = User.all
-    json_response(@users)
+    json_response(@users, :ok, :tags)
   end
 
   # POST /users
@@ -15,19 +20,33 @@ class UsersController < ApplicationController
 
   # GET /users/:id
   def show
-    json_response(@user)
+    json_response(@user, :ok, :tags)
   end
 
   # PUT /users/:id
   def update
     @user.update(user_params)
-    json_response(@user)
+    json_response(@user, :ok, :tags)
   end
 
   # DELETE /users/:id
   def destroy
     @user.destroy
-    json_response(@user)
+    json_response(@user, :ok, :tags)
+  end
+
+  # CREATE /users/:id/tags
+  def create_tags
+    @tag = Tag.find(params[:tag_id])
+    @user.tags << @tag
+    json_response(@user, :ok, :tags)
+  end
+
+  # DELETE /users/:id/tags/:tag_id
+  def destroy_tags
+    @tag = @user.tags.find(params[:tag_id])
+    @user.tags.destroy(@tag)
+    json_response(@user, :ok, :tags)
   end
 
   private
