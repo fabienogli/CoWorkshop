@@ -45,8 +45,8 @@ class UsersController < ApplicationController
   # DELETE /users/:id/tags/:tag_id
   def destroy_tags
     @tag = @user.tags.find(params[:tag_id])
-    @user.tags.delete(@tag)
-    json_response(@user, ':ok', :tags)
+    @user.tags.destroy(@tag)
+    json_response(@user, :ok, :tags)
   end
 
   private
