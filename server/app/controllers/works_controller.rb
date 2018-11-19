@@ -59,8 +59,7 @@ class WorksController < ApplicationController
 
   def work_params
     # whitelist params
-    work_params = params.permit(:name, :desc, :user_id, :users, :id, :tags)
-    work_params.merge! ({work_attributes: params[:users]}) if params[:users].present?
+    params.permit(:name, :desc, :user_id, :users, :id, :tags)
   end
 
   def set_work
