@@ -28,3 +28,15 @@ services:
       - "35729:35729"
     depends_on:
       - db
+  web :
+    image: node:11.1.0
+    ports:
+      - 8080:8080
+    command: yarn dev
+    working_dir: /webapp
+    volumes:
+      - ./frontend:/webapp
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+
