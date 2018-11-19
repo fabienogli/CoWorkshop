@@ -1,9 +1,10 @@
 class WorksController < ApplicationController
-  before_action :set_work, only: [:show, :update, :destroy]
+  before_action :set_work, only: [:show, :update, :destroy, :bind_participants, :unbound_participants, :bind_tags, :unbound_tags]
+  @@includes = [:users, :tags]
   # GET /works
   def index
     @works = Work.all
-    json_response(@works)
+    json_response(@works, :ok, @@includes)
   end
 
   # POST /works
@@ -14,13 +15,13 @@ class WorksController < ApplicationController
 
   # GET /works/:id
   def show
-    json_response(@work)
+    json_response(@work, :ok, @@includes)
   end
 
   # PUT /works/:id
   def update
     @work.update(work_params)
-    json_response(@work)
+    json_response(@work, :ok, @@includes)
   end
 
   # DELETE /works/:id
@@ -29,18 +30,40 @@ class WorksController < ApplicationController
     json_response(@work)
   end
 
+
+  def bind_participants
+    @participant = User.find(params[:user_id])
+    @work.users << @participant
+    json_response(@work, :ok, @@includes)
+  end
+
+  def unbound_participants
+    @user = @work.users.find(params[:user_id])
+    @work.users.destroy(@user)
+    json_response(@work, :ok, @@includes)
+  end
+
+  def bind_tags
+    @tag = Tag.find(params[:tag_id])
+    @work.tags << @tag
+    json_response(@work, :ok, @@includes)
+  end
+
+  def unbound_tags
+    @tag = @user.tags.find(params[:tag_id])
+    @work.tags.destroy(@tag)
+    json_response(@user, :ok, @@includes)
+  end
+
   private
 
   def work_params
     # whitelist params
-    params.permit(:name, :desc, :user_id, :users, :id)
+    work_params = params.permit(:name, :desc, :user_id, :users, :id, :tags)
+    work_params.merge! ({work_attributes: params[:users]}) if params[:users].present?
   end
 
   def set_work
     @work = Work.find(params[:id])
   end
-
-  # def set_work_creator
-  #   @user = User.find_by!(id: params[:user_id]) if @work
-  # end
 end
