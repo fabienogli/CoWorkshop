@@ -52,10 +52,10 @@ Authorization: Bearer token
 ```
 Where `token` is the jwt token previously obtained.
 
-| Prefix    | Verb  | URI Pattern               | Controller#Action |
-| :---------: | :-----: | :-------------------------: | :-----------------: |
+| Prefix    | Verb  | URI Pattern               | Controller#Action | Details
+| :---------: | :-----: | :-------------------------: | :-----------------: | :-----:
 | tags      |  GET  |  /tags                    | tags#index |
-|           | POST  | /tags                     | tags#create |
+|           | POST  | /tags                     | tags#create | ```{ "name": "Tag Example" }```|
 | tag       | GET   | /tags/:id                 | tags#show |
 |           | PATCH | /tags/:id                 | tags#update |
 |           | PUT   | /tags/:id                 | tags#update |
