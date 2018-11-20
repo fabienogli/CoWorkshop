@@ -20,7 +20,8 @@
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+# TODO irindul 2018-11-20 : Lol remove credentials from prod :D
+!/config/master.key
 
 .generators
 .rakeTasks

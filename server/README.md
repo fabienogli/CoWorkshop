@@ -26,6 +26,32 @@ Things you may want to cover:
 
 ## The api-routes : 
 
+All routes except `POST /users` are protected using [JWT](https://jwt.io).
+To obtain an authorization token, send a POST request to `login`: 
+```json
+// POST /login
+{
+  "auth": {
+    "email": "myemail@provider.com",
+    "password": "mypassword"
+  }
+}
+```
+
+The server will answer with either `401 - Unauthorized` if the credentials are incorrect or with : 
+```json
+{
+  "jwt": "token.jwt.encoded"
+}
+```
+
+You must include the token in each request to a protected route. The token is included with the Authorization header : 
+In the HTTP headers, put this : 
+```
+Authorization: Bearer token
+```
+Where `token` is the jwt token previously obtained.
+
 | Prefix    | Verb  | URI Pattern               | Controller#Action |
 | :---------: | :-----: | :-------------------------: | :-----------------: |
 | tags      |  GET  |  /tags                    | tags#index |
