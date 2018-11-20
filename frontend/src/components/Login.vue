@@ -1,23 +1,29 @@
 <template>
   <div class="login">
-    <form @submit.prevent="login">
+    <form @submit.prevent="login" class="form">
       <input type="text"
              placeholder="Email"
-             class="form-input email"
+             class="input email"
              id="email"
              v-model.trim="email">
 
       <input type="password"
              placeholder="Password"
-             class="form-input password"
+             class="input password"
              id="password"
              v-model.trim="password">
-      <button type="submit">Log in</button>
+      <div class="submit-container">
+        <button type="submit" class="submit">Log in</button>
+        <div class="empty"></div>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
+  import axios from 'axios';
+  import env from '@/env';
+
   export default {
     name: "Login",
     data() {
@@ -29,12 +35,61 @@
     },
     methods: {
       login() {
-        console.log('Logging in');
-        //Do something to log in
+
+        if (this.email !== '' && this.password !== '') {
+          axios.post(`${env.url}/login`, {
+           auth: {
+             "email": this.email,
+             "password": this.password
+           }
+          }).then((response) => {
+            const token = response.data.jwt;
+            
+            // TODO irindul 2018-11-20 : Set cookie
+            // TODO irindul 2018-11-20 : Set store token
+            // TODO irindul 2018-11-20 : Redirect to home
+          }).catch((error) => {
+            console.log(error);
+          })
+        }
       },
     },
   }
 </script>
 
-<style scoped>
+<style lang="scss">
+  .login {
+    //margin: auto;
+    max-width: 40%;
+    max-height: 20%;
+    padding: 3px;
+    .form {
+      padding-bottom: 2px;
+      display: flex;
+      flex-direction: column;
+      max-width: 50%;
+      margin: auto;
+
+      .email {
+        flex: 1;
+      }
+
+      .password {
+        flex: 1;
+      }
+
+      .submit-container {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        .submit {
+          flex: 1
+        }
+        .empty {
+          flex: 4
+        }
+      }
+    }
+  }
 </style>
