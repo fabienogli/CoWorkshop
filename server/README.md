@@ -24,7 +24,9 @@ Things you may want to cover:
 * ...
 
 
-## The api-routes : 
+## Documentation
+
+### Authentication
 
 All routes except `POST /users` are protected using [JWT](https://jwt.io).
 To obtain an authorization token, send a POST request to `login`: 
@@ -52,10 +54,13 @@ Authorization: Bearer token
 ```
 Where `token` is the jwt token previously obtained.
 
-| Prefix    | Verb  | URI Pattern               | Controller#Action | Details
-| :---------: | :-----: | :-------------------------: | :-----------------: | :-----:
+
+### Routes
+
+| Prefix    | Verb  | URI Pattern               | Controller#Action | 
+| :---------: | :-----: | :-------------------------: | :-----------------: |
 | tags      |  GET  |  /tags                    | tags#index |
-|           | POST  | /tags                     | tags#create | ```{ "name": "Tag Example" }```|
+|           | POST  | /tags                     | tags#create | 
 | tag       | GET   | /tags/:id                 | tags#show |
 |           | PATCH | /tags/:id                 | tags#update |
 |           | PUT   | /tags/:id                 | tags#update |
@@ -78,3 +83,81 @@ Where `token` is the jwt token previously obtained.
 |           | DELETE| /works/:id/users/:user_id | works#unbound_participants    |
 |           | POST  | /works/:id/tags           | works#bind_tags               |
 |           | DELETE| /works/:id/tags/:tag_id   | works#unbound_tags            |
+
+
+Details for each resource are defined in the next section
+
+#### Routes details
+
+#### Tags 
+ 
+| Field | Details | 
+| :----: | :-----: | 
+| name  | Required |  
+
+
+ ```json
+ //POST /tags
+ {
+  "name": "Tag Example"
+ }
+ ```
+
+
+#### Users  
+
+- New Users  
+
+| Field | Details | 
+| :----: | :-----: | 
+| pseudo | Required |
+| email | Required, must be a valid email |
+| password | Required |
+| password_confirmation | Required |
+| website | Optional
+
+```json
+// POST /users
+{
+  "pseudo": "Pseudo Example",
+  "email" : "example@example.com",
+  "passord": "password",
+  "password_confirmation": "password",
+  "website": "https://superwebsite.com" 
+}
+```
+
+
+- Create tags for a specific user  
+
+  > :warning: You can only modify tags of the logged in user ! To modify the other users, you must log as each of this user !
+
+
+| Field | Details | 
+| :----: | :-----: | 
+| tag_id | Id referencing tags, can be an array |
+
+```json
+//POST /users/:id/tags
+{
+"tag_id": 1
+}
+```
+
+or 
+```json
+//POST /users/:id/tags
+{
+  "tag_id": [1, 3]
+}
+```
+
+- Delete a specific tag for a specific user
+
+   > :warning: You can only modify tags of the logged in user ! To modify the other users, you must log as each of this user !
+
+  `DELETE /users/:id/tags/:tag_id `
+
+  :tag_id must be the id of a tag existing for the current user. 
+
+
