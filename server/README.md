@@ -130,7 +130,7 @@ Details for each resource are defined in the next section
 
 - Create tags for a specific user  
 
-  > :warning: You can only modify tags of the logged in user ! To modify the other users, you must log as each of this user !
+  > :warning: You can only modify tags of the logged in user ! To modify the other users, you must log as each user !
 
 
 | Field | Details | 
@@ -154,10 +154,85 @@ or
 
 - Delete a specific tag for a specific user
 
-   > :warning: You can only modify tags of the logged in user ! To modify the other users, you must log as each of this user !
+   > :warning: You can only modify tags of the logged in user ! To modify the other users, you must log as each user !
 
   `DELETE /users/:id/tags/:tag_id `
 
-  :tag_id must be the id of a tag existing for the current user. 
+  `:tag_id must be the id of a tag existing for the current user. 
 
+#### Works
 
+| Field | Details | 
+| :----: | :-----: | 
+| name | Required |
+| desc | Required |
+| user_id | Required, References an existing user |
+
+```json
+//POST /works
+{
+"name": "Project Example",
+"desc": "An simple project",
+"user_id": 1
+}
+```
+
+> :warning: Only the creator of the work will be able to modify it later
+
+- Associate users to a specific work
+
+ | Field | Details | 
+ | :----: | :-----: | 
+ | user_id | Id referencing users, can be an array |
+ 
+ ```json
+ //POST /works/:id/users
+ {
+ "user_id": 1
+ }
+ ```
+ 
+ or 
+ ```json
+ //POST /works/:id/users
+ {
+   "users_id": [1, 3]
+ }
+ ``` 
+ 
+ -  Remove a specific user to a specific work
+ 
+ > :warning: You can only remove the logged in user from a project ! To modify the other users, you must log as each user !
+
+`DELETE /works/:id/users/:user_id`
+
+`:user_id` must reference a user participating on the work.
+
+- Add tag to a specific work 
+
+> :warning: Only the creator of the project can modify its tags !
+
+| Field | Details | 
+| :----: | :-----: | 
+| tag_id | Must reference an existing tag, can be an array |
+
+```json
+ //POST /works/:id/tags
+ {
+ "tag_id": 1
+ }
+ ```
+ 
+ or 
+ ```json
+ //POST /works/:id/tags
+ {
+   "tags_id": [1, 3]
+ }
+ ``` 
+ 
+ - Remove a specific tag from a specific work
+ 
+ `DELETE /works/:id/tags/:tag_id`
+ 
+ `:tag_id` must reference a tag belonging to the work.
