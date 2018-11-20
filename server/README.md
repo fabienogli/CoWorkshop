@@ -140,7 +140,7 @@ Details for each resource are defined in the next section
 ```json
 //POST /users/:id/tags
 {
-"tag_id": 1
+  "tag_id": 1
 }
 ```
 
@@ -171,9 +171,9 @@ or
 ```json
 //POST /works
 {
-"name": "Project Example",
-"desc": "An simple project",
-"user_id": 1
+  "name": "Project Example",
+  "desc": "An simple project",
+  "user_id": 1
 }
 ```
 
@@ -188,7 +188,7 @@ or
  ```json
  //POST /works/:id/users
  {
- "user_id": 1
+  "user_id": 1
  }
  ```
  
@@ -219,7 +219,7 @@ or
 ```json
  //POST /works/:id/tags
  {
- "tag_id": 1
+  "tag_id": 1
  }
  ```
  
