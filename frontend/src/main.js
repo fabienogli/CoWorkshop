@@ -7,10 +7,13 @@ import store from './store'
 import './styles/global.scss'
 import VueCookies from 'vue-cookies'
 import Vuex from 'vuex'
+import {setStateFromCookie} from "./utll";
 
 Vue.use(VueCookies);
 Vue.use(Vuex);
 Vue.config.productionTip = false;
+
+setStateFromCookie();
 
 /* eslint-disable no-new */
 new Vue({
