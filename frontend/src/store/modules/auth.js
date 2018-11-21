@@ -14,13 +14,17 @@ const getters = {
 
 const mutations = {
   replaceToken(state, token) {
-    state.token = token;
+    state.token = token || '';
+  },
+  setUserId(state, id) {
+    state.user_id = id;
   }
 };
 
 const actions = {
-  setToken({commit}, token) {
-    commit('replaceToken', token);
+  setTokenAndUserId({commit}, payload) {
+    commit('replaceToken', payload.token);
+    commit('setUserId', payload.user.id);
   }
 };
 

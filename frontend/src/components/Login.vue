@@ -28,8 +28,8 @@
     name: "Login",
     data() {
       return {
-        email: "",
-        password: "",
+        email: "test@test.com",
+        password: "azerty",
         errors: [],
       }
     },
@@ -43,11 +43,13 @@
              "password": this.password
            }
           }).then((response) => {
-            const token = response.data.jwt;
-            
-            // TODO irindul 2018-11-20 : Set cookie
-            // TODO irindul 2018-11-20 : Set store token
-            // TODO irindul 2018-11-20 : Redirect to home
+            const auth = response.data;
+            this.$store.dispatch('auth/setTokenAndUserId', auth);
+            this.$cookies.set("currentUser", {
+              token: auth.token,
+              id: auth.user.id,
+            });
+            this.$router.push('/home');
           }).catch((error) => {
             console.log(error);
           })
