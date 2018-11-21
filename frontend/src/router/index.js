@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Home from '@/components/Home'
+import ProjectForm from '@/components/ProjectForm'
 import store from '@/store'
 
 import HelloWorld from '@/components/HelloWorld'
@@ -40,6 +42,10 @@ const router = new Router({
       path: '*',
       name: 'notFound',
       component: NotFound,
+    {
+      path: '/work',
+      name: 'work',
+      component: ProjectForm
     }
   ]
 });
