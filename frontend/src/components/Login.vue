@@ -49,7 +49,7 @@
               token: auth.token,
               id: auth.user.id,
             });
-            this.$router.push('/home');
+            this.$router.push({ name: "home" });
           }).catch((error) => {
             console.log(error);
           })

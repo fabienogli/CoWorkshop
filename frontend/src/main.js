@@ -8,7 +8,9 @@ import './styles/global.scss'
 import VueCookies from 'vue-cookies'
 import Vuex from 'vuex'
 import {setStateFromCookie} from "./utll";
+import VeeValidate from 'vee-validate';   //@TODO use for validation of fields doc: https://baianat.github.io/vee-validate/guide/getting-started.html#installation
 
+Vue.use(VeeValidate);
 Vue.use(VueCookies);
 Vue.use(Vuex);
 Vue.config.productionTip = false;

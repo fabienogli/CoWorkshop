@@ -9,18 +9,19 @@ import NotFound from '@/components/NotFound'
 Vue.use(Router);
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: Login,
       meta: {
         guest: true,
       }
     },
     {
-      path: '/home',
-      name: 'Home',
+      path: '/',
+      name: 'home',
       component: HelloWorld,
       meta: {
         requiresAuth: true,
@@ -28,7 +29,7 @@ const router = new Router({
     },
     {
       path: '*',
-      name: 'NotFound',
+      name: 'notFound',
       component: NotFound,
     }
   ]
