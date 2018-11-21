@@ -1,6 +1,5 @@
 <template>
   <div id="projectList">
-    <router-link :to="{ name: 'home' }">Home</router-link>
     <div v-for="project in projects">
       <Project :project="project" />
     </div>
