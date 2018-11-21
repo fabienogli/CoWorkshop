@@ -33,7 +33,7 @@
              v-model.trim="password_confirm">
 
       <div class="submit-container">
-        <button type="submit" class="submit">Log in</button>
+        <button type="submit" class="submit">Register</button>
         <div class="empty"></div>
       </div>
     </form>
@@ -41,12 +41,13 @@
 </template>
 
 <script>
-  import {loginAndRedirectTo} from "../utll";
+  import {loginAndRedirectTo} from "@/util";
+  import env from '@/env';
   import axios from 'axios';
 
   export default {
     name: "Register",
-    date() {
+    data() {
       return {
         email: '',
         pseudo: '',
@@ -57,24 +58,27 @@
     },
     methods: {
       isValidForm() {
-        return email !== ''
-          && pseudo !== ''
-          && password !== ''
-          && password_confirm !== ''
-          && password === password_confirm;
+        return this.email !== ''
+          && this.pseudo !== ''
+          && this.password !== ''
+          && this.password_confirm !== ''
+          && this.password === this.password_confirm;
       },
       register() {
         if(this.isValidForm()) {
-          axios.post('/users', {
+          const url = `${env.url}/users`;
+          axios.post(url, {
             "email": this.email,
             "pseudo": this.pseudo,
             "password": this.password,
             "password_confirm": this.password_confirm,
-            "website": "website"
+            "website": this.website
           }).then((response) => {
             const user = response.data;
             loginAndRedirectTo(user.email, this.password);
           });
+        } else {
+          console.error('not valid');
         }
       }
     }

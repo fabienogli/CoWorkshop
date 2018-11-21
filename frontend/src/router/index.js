@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import store from '@/store'
 
 import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/Login'
+import Login from '@/components/auth/Login'
+import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
 
 Vue.use(Router);
@@ -20,7 +21,15 @@ const router = new Router({
       }
     },
     {
-      path: '/',
+      path: '/register',
+      name: 'register',
+      component: Register,
+      meta: {
+        guest: true,
+      }
+    },
+    {
+      path: '/home',
       name: 'home',
       component: HelloWorld,
       meta: {

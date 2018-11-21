@@ -24,8 +24,7 @@
   // TODO irindul 2018-11-21 : Handle login errors
   // TODO irindul 2018-11-21 : Validation
 
-
-  import {loginAndRedirectTo} from "@/utll";
+  import {loginAndRedirectTo} from "@/util";
 
   export default {
     name: "Login",

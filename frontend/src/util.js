@@ -53,8 +53,8 @@ const login = (email, password) => {
 const createPayload = (email, password) => {
   return {
     auth: {
-      "email": email,
-      "password": password
+      email,
+      password
     }
   }
 };
