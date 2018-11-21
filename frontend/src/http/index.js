@@ -16,7 +16,7 @@ class Http {
     service.interceptors.request.use(
       config => {
         config.headers.Accept = 'application/json';
-        const token = store.state.getters['auth/token'] || '';
+        const token = store.getters['auth/token'] || '';
         if (token !== '') {
           config.headers.Authorization = `Bearer ${token}`;
         }
