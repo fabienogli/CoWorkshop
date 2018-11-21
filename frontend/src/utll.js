@@ -2,6 +2,7 @@ import store from './store';
 import Vue from 'vue';
 import axios from 'axios';
 import env from './env';
+import router from './router';
 
 const mapCookieToObject = (cookie) => {
   return {
@@ -17,34 +18,36 @@ const mapObjectToCookie = (object) => {
   }
 };
 
-
 const setStateFromCookie = () => {
   const authCookie = Vue.cookies.get('currentUser');  //@TODO check cookie integrity
-  if(authCookie) {
+  if (authCookie) {
     const auth = mapCookieToObject(authCookie);
     store.dispatch('auth/setTokenAndUserId', auth);
   }
 };
 
-
-const loginAndRedirectTo = (email, password, route='/home') => {
-  login.then(() => {
-    redirectTo(route);
-    return Promise.resolve();
-  }).catch((error) => {
-    return Promise.error(error);
-  })
+const loginAndRedirectTo = (email, password, route = '/home') => {
+  return new Promise((resolve, reject) => {
+    login(email, password).then(() => {
+      redirectTo(route);
+      resolve();
+    }).catch((error) => {
+      reject(error);
+    })
+  });
 };
 
 const login = (email, password) => {
-  const loginUrl = `${env.url}/login`;
-  const payload = createPayload(email, password);
-  axios.post(loginUrl, payload).then((response) => {
-    setAuth(response.data);
-    return Promise.resolve();
-  }).catch((error) => {
-    return Promise.error(error);
-  })
+  return new Promise((resolve, reject) => {
+    const loginUrl = `${env.url}/login`;
+    const payload = createPayload(email, password);
+    axios.post(loginUrl, payload).then((response) => {
+      setAuth(response.data);
+      resolve();
+    }).catch((error) => {
+      reject(error);
+    })
+  });
 };
 
 const createPayload = (email, password) => {
@@ -57,9 +60,9 @@ const createPayload = (email, password) => {
 };
 
 const setAuth = (auth) => {
-  this.$store.dispatch('auth/setTokenAndUserId', auth);
+  store.dispatch('auth/setTokenAndUserId', auth);
   const cookie = mapObjectToCookie(auth);
-  this.$cookies.set('currentUser', cookie);
+  Vue.cookies.set('currentUser', cookie);
 };
 
 const redirectTo = (route) => {

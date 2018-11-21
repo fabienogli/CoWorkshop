@@ -42,6 +42,7 @@
 
 <script>
   import {loginAndRedirectTo} from "../utll";
+  import axios from 'axios';
 
   export default {
     name: "Register",
@@ -58,15 +59,22 @@
       isValidForm() {
         return email !== ''
           && pseudo !== ''
-          && website !== ''
           && password !== ''
           && password_confirm !== ''
           && password === password_confirm;
       },
       register() {
         if(this.isValidForm()) {
-          // TODO irindul 2018-11-21 : Register then login
-          loginAndRedirectTo(this.email, this.password)
+          axios.post('/users', {
+            "email": this.email,
+            "pseudo": this.pseudo,
+            "password": this.password,
+            "password_confirm": this.password_confirm,
+            "website": "website"
+          }).then((response) => {
+            const user = response.data;
+            loginAndRedirectTo(user.email, this.password);
+          });
         }
       }
     }

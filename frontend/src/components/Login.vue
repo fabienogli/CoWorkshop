@@ -33,7 +33,7 @@
       return {
         email: "test@test.com",
         password: "azerty",
-        errors: [],
+        formErrors: [],
       }
     },
     methods: {
