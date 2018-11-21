@@ -1,18 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
+
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
-import store from '@/store'
+import NotFound from '@/components/NotFound'
 
 Vue.use(Router);
 
 const router = new Router({
   routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
     {
       path: '/login',
       name: 'Login',
@@ -28,14 +25,34 @@ const router = new Router({
       meta: {
         requiresAuth: true,
       }
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: NotFound,
     }
   ]
 });
 
+const routeRequireAuth = (route) => {
+  return route.matched.some(record => record.meta.requiresAuth)
+};
+
+const routeIsGuest = (route) => {
+  return route.matched.some(record => record.meta.guest)
+};
+
+const tokenExists = () => {
+  return store.getters['auth/token'] !== '';
+};
+
+const tokenDoesNotExist = () => {
+  return !tokenExists();
+};
+
 router.beforeEach((to, from, next) => {
-  //The route and its subroutes need auth
-  if(to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters['auth/token'] === '') {
+  if(routeRequireAuth(to)) {
+    if (tokenDoesNotExist()) {
       next({
         path: '/login',
         params: { nextUrl: to.fullPath}
@@ -43,14 +60,14 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
-  }
-  //the route must be guest
-  else if (to.matched.some(record => record.meta.guest)) {
-    if(store.getters['auth/token'] === '') {
+  } else if (routeIsGuest(to)) {
+    if(tokenDoesNotExist()) {
       next();
     } else {
       next(false);
     }
+  } else {
+    next();
   }
 });
 
