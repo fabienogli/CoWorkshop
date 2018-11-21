@@ -25,6 +25,10 @@ const actions = {
   setTokenAndUserId({commit}, payload) {
     commit('replaceToken', payload.token);
     commit('setUserId', payload.user.id);
+  },
+  logout({commit}) {
+    commit('replaceToken', "");
+    commit('setUserId', 0);
   }
 };
 

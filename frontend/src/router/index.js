@@ -41,7 +41,10 @@ const router = new Router({
     {
       path: '/work/list',
       name: 'workList',
-      component: ProjectList
+      component: ProjectList,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '*',
@@ -51,7 +54,10 @@ const router = new Router({
     {
       path: '/work',
       name: 'work',
-      component: ProjectForm
+      component: ProjectForm,
+      meta: {
+        requiresAuth: true,
+      }
     }
   ]
 });

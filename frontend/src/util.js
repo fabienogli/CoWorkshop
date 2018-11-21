@@ -26,7 +26,7 @@ const setStateFromCookie = () => {
   }
 };
 
-const loginAndRedirectTo = (email, password, route = '/home') => {
+const loginAndRedirectTo = (email, password, route = '/') => {
   return new Promise((resolve, reject) => {
     login(email, password).then(() => {
       redirectTo(route);
@@ -50,6 +50,13 @@ const login = (email, password) => {
   });
 };
 
+const logout = () => {
+  console.log("Dans logout");
+  store.dispatch('auth/logout');
+  Vue.cookies.remove('currentUser');
+  router.push({name: 'login'});
+};
+
 const createPayload = (email, password) => {
   return {
     auth: {
@@ -69,4 +76,4 @@ const redirectTo = (route) => {
   router.push(route);
 };
 
-export {setStateFromCookie, loginAndRedirectTo};
+export {setStateFromCookie, loginAndRedirectTo, logout};
