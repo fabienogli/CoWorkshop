@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  match '*all', controller: 'application', action: 'cors_preflight_check', via: [:options]
   post 'login' => 'user_token#create'
   resources :tags, :users, :works
   post '/users/:id/tags', to: 'users#create_tags'
