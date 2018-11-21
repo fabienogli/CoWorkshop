@@ -41,6 +41,7 @@
           "user_id": this.userId,
         }).then(response => {
           const project = response.data;
+          this.$router.push({ name:"workList"})
         })
       }
     },

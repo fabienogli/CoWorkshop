@@ -4,7 +4,6 @@ import Home from '@/components/Home'
 import ProjectForm from '@/components/ProjectForm'
 import store from '@/store'
 
-import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
@@ -32,7 +31,7 @@ const router = new Router({
       }
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: Home,
       meta: {
