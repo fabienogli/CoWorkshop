@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Home from '@/components/Home'
+import ProjectForm from '@/components/ProjectForm'
 import store from '@/store'
 
-import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
+import ProjectList from '@/components/ProjectList'
 
 Vue.use(Router);
 
@@ -29,17 +31,27 @@ const router = new Router({
       }
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
-      component: HelloWorld,
+      component: Home,
       meta: {
         requiresAuth: true,
       }
     },
     {
+      path: '/work/list',
+      name: 'workList',
+      component: ProjectList
+    },
+    {
       path: '*',
       name: 'notFound',
       component: NotFound,
+    },
+    {
+      path: '/work',
+      name: 'work',
+      component: ProjectForm
     }
   ]
 });
