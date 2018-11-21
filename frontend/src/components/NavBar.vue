@@ -2,12 +2,19 @@
   <div id="navBar">
     <h1></h1>
     <ul>
-      <li v-for="route in routes"><router-link class="custom" :to="{ name: route.page }">{{route.text}}</router-link></li>
+      <li  v-if="connected" v-for="route in routes"><router-link class="custom" :to="{ name: route.page }">{{route.text}}</router-link></li>
+      <li>
+        <a @click="out" href="#">
+          Logout
+        </a>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+  import {logout} from "@/util";
+  import {tokenExists} from "@/router";
   export default {
     name: "NavBar",
     data() {
@@ -31,6 +38,18 @@
         ],
       }
     },
+    methods: {
+      out() {
+        logout();
+      },
+    },
+    computed: {
+      connected() {
+        return this.$store.getters['auth/token']  !== '';
+      }
+    },
+    mounted() {
+    }
   }
 </script>
 
