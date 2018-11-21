@@ -21,8 +21,11 @@
 </template>
 
 <script>
-  import axios from 'axios';
-  import env from '@/env';
+  // TODO irindul 2018-11-21 : Handle login errors
+  // TODO irindul 2018-11-21 : Validation
+
+
+  import {loginAndRedirectTo} from "@/utll";
 
   export default {
     name: "Login",
@@ -35,24 +38,8 @@
     },
     methods: {
       login() {
-
         if (this.email !== '' && this.password !== '') {
-          axios.post(`${env.url}/login`, {
-           auth: {
-             "email": this.email,
-             "password": this.password
-           }
-          }).then((response) => {
-            const auth = response.data;
-            this.$store.dispatch('auth/setTokenAndUserId', auth);
-            this.$cookies.set("currentUser", {
-              token: auth.token,
-              id: auth.user.id,
-            });
-            this.$router.push({ name: "home" });
-          }).catch((error) => {
-            console.log(error);
-          })
+          loginAndRedirectTo(this.email, this.password);
         }
       },
     },
