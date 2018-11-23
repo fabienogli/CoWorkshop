@@ -43,7 +43,14 @@ class WorksController < ApplicationController
   def bind_participants
     @participant = User.find(params[:user_id])
     @work.users << @participant
-    json_response(@work, :ok, @@includes)
+    if @work.save
+      ActionCable.server.broadcast('subscribers',
+       work_id: @work.id
+      )
+      json_response(@work, :ok, @@includes)
+    else
+      p :swag
+    end
   end
 
   # DELETE /works/:id/users/:user_id
