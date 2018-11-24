@@ -1,5 +1,5 @@
 class Subscriber {
-  constructor(connectionUrl, config = {}) {
+  async constructor(connectionUrl, config = {}) {
     this.url = connectionUrl;
     this.config = config;
     this.reconnectionCount = 0;
@@ -11,62 +11,85 @@ class Subscriber {
     
     this.connected = false;
     
-    this.socket = Subscriber.connect(connectionUrl, config);
+    this.socket = await Subscriber.connect(connectionUrl, config);
     this.setUpListeners();
   }
   
-  static connect(url, config) {
-    let protocol = config.protocol || '';
-    return protocol === '' ? new WebSocket(url) : new WebSocket(url, protocol);
+  static async connect(url, config) {
+    return new Promise((resolve, reject) => {
+      let protocol = config.protocol || '';
+      let socket = protocol === '' ? new WebSocket(url) : new WebSocket(url,
+        protocol);
+      socket.onopen(() => {
+        resolve(socket);
+      });
+      
+      socket.onerror((err) => {
+        reject(err);
+      })
+    });
   }
   
-  reconnect() {
+  async reconnect() {
     if (this.reconnectionCount <= this.config.reconnectionAttempts) {
       this.reconnectionCount++;
       clearTimeout(this.reconnectTimeoutId);
       
-      this.reconnectTimeoutId = setTimeout(() => {
-        this.socket = Subscriber.connect();
+      this.reconnectTimeoutId = setTimeout(async () => {
+        this.socket = await Subscriber.connect(this.url, this.config);
         this.setUpListeners();
       }, this.config.reconnectionDelay)
     }
   }
   
   setUpListeners() {
-    const defaultOnOpen = () => {
-      this.connected = true;
+    const defaultOnMessage = (message) => {
+      //Do nothing
     };
     
-    const defaultOnMessage = (message) => {
-      console.log(message);
-    };
     this.onmessage = this.config.onmessage || defaultOnMessage;
-    this.socket.onopen = this.config.onopen || defaultOnOpen;
+    
     this.socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      if (message.type === "ping") {
-        return;
-      }
-      if (message.type === "confirm_subscription") {
-        console.log('Confirmed !');
-        this.onmessage(message);
-      } else {
-        this.onmessage(message);
+      if(message.identifier) {
+        const channel = JSON.parse(message.identifier).channel;
+        Object.keys(this.channels)
+          .filter(chan => chan.id === channel.id)
+          .forEach(chan => {
+            chan.map(handler => handler.callback)
+                .forEach(fn => fn());
+          });
       }
     };
   }
   
-  subscribe(channel, fn) {
+  subscribe(channel, id,  fn) {
     const msg = {
       command: 'subscribe',
       identifier: JSON.stringify({
         channel: channel,
       }),
     };
-    console.log('sending', JSON.stringify(msg));
     this.socket.send(JSON.stringify(msg));
-    this.channels[channel] = fn;
+    if(this.channels[channel] && this.channels[channel].constructor === Array) {
+      const handler = {
+        id: 1,
+        callback: fn,
+      };
+      this.channels[channel].push(handler);
+    }
   }
+  
+  unsubscribe(channelToUnSub, id) {
+    const channel = this.channels[channelToUnSub];
+    if(channel) {
+      this.channels[channelToUnSub] = channel.filter(handler => {
+        return handler.id !== id;
+      });
+    }
+  }
+  
+  
 }
 
 export default Subscriber
