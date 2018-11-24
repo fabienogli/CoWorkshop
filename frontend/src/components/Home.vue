@@ -19,10 +19,7 @@
       }
     },
     mounted() {
-      //do something after mounting vue instance
-      //@TODO to remove, here for debug purpose
-      var user = this.$cookies.get("currentUser");
-      console.log(user);
+
     }
   }
 </script>

@@ -28,20 +28,10 @@
       }
     },
     mounted() {
-      this.getWorks();
-
-      this.$socket.onopen(() => {
-        const msg = {
-          command: 'subscribe',
-          identifier: JSON.stringify({
-            channel: 'subscribers',
-          }),
-        };
-
-        this.$socket.send(JSON.stringify(msg));
-      });
-      this.$options.sockets.onmessage = (data) => console.log(data);
-      this.$options.sockets.subscribers = (data) => console.log(data);
+      this.$subscriber.subscribe('WorkChannel', (message) => {
+        console.log('subscribed');
+        console.log(message);
+      })
     }
   }
 </script>

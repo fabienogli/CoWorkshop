@@ -44,9 +44,7 @@ class WorksController < ApplicationController
     @participant = User.find(params[:user_id])
     @work.users << @participant
     if @work.save
-      ActionCable.server.broadcast('subscribers',
-       work_id: @work.id
-      )
+      ActionCable.server.broadcast 'works', @work
       json_response(@work, :ok, @@includes)
     else
       p :swag
