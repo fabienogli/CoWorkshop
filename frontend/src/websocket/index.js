@@ -1,14 +1,19 @@
 import Subscriber from './Subscriber';
+import Emitter from './Emitter';
 
 export default {
   install(Vue, connection, config = {}) {
-    if(!connection) {
+    if (!connection) {
       throw new Error('[irindul-websocket] - cannot locate connection');
     }
     
-    console.log(connection);
     let subscriber = new Subscriber(connection, config);
-    Vue.prototype.$socket = subscriber.socket;
-    Vue.prototype.$subscriber = subscriber;
+    subscriber.connectAndSetUpListeners().then(() => {
+      let emitter = new Emitter(subscriber.socket);
+      Vue.prototype.$socket = subscriber.socket;
+      Vue.prototype.$subscriber = subscriber;
+      Vue.prototype.$emitter = emitter;
+    });
+    
   }
 }

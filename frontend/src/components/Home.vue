@@ -19,7 +19,9 @@
       }
     },
     mounted() {
-
+      this.$subscriber.subscribe('WorkChannel',  1,(message) => {
+        console.log('In callback :', message);
+      })
     }
   }
 </script>
