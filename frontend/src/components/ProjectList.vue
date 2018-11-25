@@ -8,6 +8,7 @@
 <script>
   import Project from '@/components/Project';
   import http from '@/http';
+
   export default {
     name: "ProjectList",
     components: {Project},
@@ -25,7 +26,7 @@
           .then(response => {
             this.projects = response.data;
           });
-      }
+      },
     },
     mounted() {
       this.getWorks();

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/socket'
+
   match '*all', controller: 'application', action: 'cors_preflight_check', via: [:options]
   post 'login' => 'user_token#create'
   resources :tags, :users, :works

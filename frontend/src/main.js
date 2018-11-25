@@ -9,10 +9,18 @@ import VueCookies from 'vue-cookies'
 import Vuex from 'vuex'
 import {setStateFromCookie} from "./util";
 import VeeValidate from 'vee-validate';   //@TODO use for validation of fields doc: https://baianat.github.io/vee-validate/guide/getting-started.html#installation
+import VueWebsocket from './websocket';
 
 Vue.use(VeeValidate);
 Vue.use(VueCookies);
 Vue.use(Vuex);
+
+
+Vue.use(VueWebsocket, 'ws://localhost:3000/socket', {
+  //Options here
+});
+//Vue.use(VueNativeSock, 'ws://localhost:3000/socket', {format: 'json',});
+
 Vue.config.productionTip = false;
 
 setStateFromCookie();
