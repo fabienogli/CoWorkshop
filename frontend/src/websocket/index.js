@@ -8,12 +8,9 @@ export default {
     }
     
     let subscriber = new Subscriber(connection, config);
-    subscriber.connectAndSetUpListeners().then(() => {
-      let emitter = new Emitter(subscriber.socket);
-      Vue.prototype.$socket = subscriber.socket;
-      Vue.prototype.$subscriber = subscriber;
-      Vue.prototype.$emitter = emitter;
-    });
-    
+    let emitter = new Emitter(subscriber.socket);
+    Vue.prototype.$socket = subscriber.socket;
+    Vue.prototype.$subscriber = subscriber;
+    Vue.prototype.$emitter = emitter;
   }
 }
