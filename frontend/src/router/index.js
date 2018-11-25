@@ -7,7 +7,9 @@ import store from '@/store'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
-import ProjectList from '@/components/ProjectList'
+import Projects from '@/components/Projects'
+import TagForm from '@/components/TagForm'
+import Tags from '@/components/Tags'
 
 Vue.use(Router);
 
@@ -39,9 +41,33 @@ const router = new Router({
       }
     },
     {
-      path: '/work/list',
+      path: '/works',
       name: 'workList',
-      component: ProjectList,
+      component: Projects,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/works/new',
+      name: 'work',
+      component: ProjectForm,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/tags',
+      name: 'tags',
+      component: Tags,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/tags/new',
+      name: 'tag',
+      component: TagForm,
       meta: {
         requiresAuth: true,
       }
@@ -51,14 +77,6 @@ const router = new Router({
       name: 'notFound',
       component: NotFound,
     },
-    {
-      path: '/work',
-      name: 'work',
-      component: ProjectForm,
-      meta: {
-        requiresAuth: true,
-      }
-    }
   ]
 });
 
