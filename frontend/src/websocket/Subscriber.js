@@ -83,6 +83,7 @@ class Subscriber {
         command: 'subscribe',
         identifier: JSON.stringify({
           channel: channel,
+          user_id: id
         }),
       };
       this.socket.send(JSON.stringify(msg));
