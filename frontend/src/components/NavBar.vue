@@ -2,7 +2,9 @@
   <div id="navBar">
     <h1></h1>
     <ul>
-      <li  v-if="connected" v-for="route in routes"><router-link class="custom" :to="{ name: route.page }">{{route.text}}</router-link></li>
+      <li v-for="route in routes">
+        <router-link active-class="active" v-if="connected" class="custom" :to="{ name: route.name }">{{ route.text }}</router-link>
+      </li>
       <li>
         <a @click="out" href="#">
           Logout
@@ -15,27 +17,17 @@
 <script>
   import {logout} from "@/util";
   import {tokenExists} from "@/router";
+
+  let forbiddenArray = [
+    '/tags/new',
+    '/works/new'
+  ];
+
   export default {
     name: "NavBar",
     data() {
       return {
-        routes: [
-          {
-            id: 0,
-            text: 'Home',
-            page: 'home',
-          },
-          {
-            id: 1,
-            text: 'Create Project',
-            page: 'work',
-          },
-          {
-            id: 2,
-            text: 'Project List',
-            page: 'workList',
-          },
-        ],
+        routes: [],
       }
     },
     methods: {
@@ -49,6 +41,21 @@
       }
     },
     mounted() {
+      //Get the routers routes
+      this.$router.options.routes.forEach(route => {
+        if (route.meta === undefined) {
+          return;
+        }
+        if (route.meta.guest !== undefined) {
+          return
+        }
+        for (let i = 0; i < forbiddenArray.length; i ++) {
+          if (route.path === forbiddenArray[i]) {
+            return
+          }
+        }
+        this.routes.push(route);
+      });
     }
   }
 </script>
@@ -79,5 +86,10 @@
   li a:hover {
     background-color: #111;
   }
+
+  .router-link-exact-active.active {
+    background-color: black;
+  }
+  li:last-child { float:right; }
 
 </style>

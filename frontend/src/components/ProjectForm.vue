@@ -1,19 +1,40 @@
 <template>
   <div id="projectForm">
-    <h1>Project form page</h1>
-    <form @submit.prevent="createProject">
-      <p>
-        <label for="name">name</label>
-        <input id="name" v-model="name" type="text" name="name">
-      </p>
-      <p>
-        <label for="desc">Description</label>
-        <input id="desc" v-model="desc" type="text" name="desc">
-      </p>
-      <p>
-        <input type="submit" value="Submit">
-      </p>
-    </form>
+    <transition name="modal" @keydown.esc="close">
+      <div class="modal-mask" @click="close">
+        <div class="modal-wrapper">
+          <div class="modal-container" @click.stop="">
+
+            <div class="modal-header">
+              <slot name="header">
+                <h3>Create a new Project ! </h3>
+              </slot>
+            </div>
+            <div class="modal-body">
+              <slot name="body">
+                <p>
+                <label for="name">name</label>
+                <input id="name" v-model="name" type="text" name="name">
+                </p>
+                <p>
+                <label for="desc">Description</label>
+                <input id="desc" v-model="desc" type="text" name="desc">
+                </p>
+              </slot>
+            </div>
+
+            <div class="modal-footer">
+              Créer un Project {{name}}
+              <slot name="footer">
+                <button class="modal-default-button" @click="createProject">
+                  OK
+                </button>
+              </slot>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -31,17 +52,27 @@
       }
     },
     methods: {
-      checkForm: function (e) {
+      checkForm() {
         return true;
       },
-      createProject: function () {
+      close() {
+        this.raz();
+        this.$emit('close');
+      },
+      raz() {
+        this.name = "";
+        this.desc = "";
+        this.password = "";
+        this.userId = 0;
+      },
+      createProject() {
         http.post("/works", {
           "name": this.name,
           "desc": this.desc,
           "user_id": this.userId,
         }).then(response => {
-          const project = response.data;
-          this.$router.push({ name:"workList"})
+          this.$emit('newProject', response.data);
+          this.close();
         })
       }
     },
