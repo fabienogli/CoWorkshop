@@ -2,7 +2,7 @@
   <div id="projects">
     <h1>Projects Component</h1>
     <button class="button create" id="show-modal" @click="showModal = true" >Créer un projet</button>
-    <ProjectForm v-if="showModal"/>
+    <ProjectForm v-if="showModal" @close="showModal = false" @newProject="addWork"/>
     <ProjectList :projects="projects"/>
   </div>
 </template>
@@ -11,14 +11,13 @@
   import ProjectList from '@/components/ProjectList';
   import ProjectForm from '@/components/ProjectForm';
   import http from '@/http';
-
   export default {
     name: "Projects",
     components: {ProjectList, ProjectForm},
     data() {
       return {
         projects: [],
-        showModal: true,
+        showModal: false,
       }
     },
     methods: {
@@ -28,9 +27,8 @@
             this.projects = response.data;
           });
       },
-      addTag(work) {
-        console.log("Dans add taf");
-        this.tags.push(work);
+      addWork(work) {
+        this.projects.push(work);
       },
     },
     mounted() {
@@ -39,6 +37,5 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

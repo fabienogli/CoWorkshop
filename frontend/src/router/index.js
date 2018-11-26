@@ -35,6 +35,7 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
+      text: "Home",
       component: Home,
       meta: {
         requiresAuth: true,
@@ -42,16 +43,9 @@ const router = new Router({
     },
     {
       path: '/works',
-      name: 'workList',
+      name: 'works',
+      text: "Projects",
       component: Projects,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: '/works/new',
-      name: 'work',
-      component: ProjectForm,
       meta: {
         requiresAuth: true,
       }
@@ -59,15 +53,8 @@ const router = new Router({
     {
       path: '/tags',
       name: 'tags',
+      text: "Tags",
       component: Tags,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: '/tags/new',
-      name: 'tag',
-      component: TagForm,
       meta: {
         requiresAuth: true,
       }

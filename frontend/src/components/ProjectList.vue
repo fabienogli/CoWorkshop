@@ -1,5 +1,5 @@
 <template>
-  <div id="projectList">
+  <div class="projectList">
     <div v-for="project in projects">
       <Project :project="project" />
     </div>
@@ -14,5 +14,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .projectList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 </style>

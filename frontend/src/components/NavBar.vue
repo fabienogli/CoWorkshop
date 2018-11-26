@@ -3,7 +3,7 @@
     <h1></h1>
     <ul>
       <li v-for="route in routes">
-        <router-link v-if="connected" class="custom" :to="{ name: route.name }">{{ route.name }}</router-link>
+        <router-link active-class="active" v-if="connected" class="custom" :to="{ name: route.name }">{{ route.text }}</router-link>
       </li>
       <li>
         <a @click="out" href="#">
@@ -86,5 +86,10 @@
   li a:hover {
     background-color: #111;
   }
+
+  .router-link-exact-active.active {
+    background-color: black;
+  }
+  li:last-child { float:right; }
 
 </style>

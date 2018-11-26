@@ -31,8 +31,7 @@
           });
       },
       addTag(tag) {
-        console.log("Dans add taf");
-        this.tags.push(tag);
+          this.tags.push(tag);
       },
     },
     mounted() {
