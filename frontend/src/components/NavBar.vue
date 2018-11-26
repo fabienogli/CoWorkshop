@@ -113,6 +113,10 @@
       color: white;
 
     }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .router-link-exact-active.active {
