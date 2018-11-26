@@ -23,6 +23,7 @@
 <script>
   import {logout} from "@/util";
   import {tokenExists} from "@/router";
+  import notifications from "../store/modules/notifications";
 
   let forbiddenArray = [
     '/tags/new',
@@ -48,8 +49,13 @@
       connected() {
         return this.$store.getters['auth/token'] !== '';
       },
+      notifications() {
+        return this.$store.getters['notification/notifs']
+      },
       notifCount() {
-        return 0;
+        return this.notifications.filter(notif => {
+          return !notif.read
+        }).length;
       }
     },
     mounted() {

@@ -26,10 +26,19 @@
         }
       },
       onSubscribe(work, user) {
-        console.log(user.pseudo + ' is participating to your work ' + work.name);
+        const title = `${user.pseudo} is participating to your work  ${work.name} !`;
+        this.createAndDispatchNotification(title);
       },
       onUnsubscribe(work, user) {
-        console.log(user.pseudo + ' is not participating anymore to your work ' + work.name);
+        const title = `${user.pseudo} is not participating to your work ${work.name} anymore !`;
+        this.createAndDispatchNotification(title);
+      },
+      createAndDispatchNotification(title) {
+        const notif = {
+          title,
+          read: false,
+        };
+        this.$store.dispatch('notification/addNotif', notif);
       }
     },
     mounted() {
