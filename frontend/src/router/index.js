@@ -10,6 +10,7 @@ import NotFound from '@/components/NotFound'
 import Projects from '@/components/Projects'
 import TagForm from '@/components/TagForm'
 import Tags from '@/components/Tags'
+import NotificationDrawer from '@/components/NotificationDrawer'
 
 Vue.use(Router);
 
@@ -55,6 +56,14 @@ const router = new Router({
       name: 'tags',
       text: "Tags",
       component: Tags,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: NotificationDrawer,
       meta: {
         requiresAuth: true,
       }

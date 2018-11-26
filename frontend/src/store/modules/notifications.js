@@ -17,6 +17,11 @@ const mutations = {
     state.notifs = state.notifs.filter(notification => {
       return notification.id !== notif.id;
     })
+  },
+  setRead(state, notif) {
+    const notification = JSON.parse(JSON.stringify(notif));
+    notification.read = true;
+    state.notifs.splice(notif.id, 1, notification);
   }
 };
 
@@ -26,8 +31,10 @@ const actions = {
   },
   removeNotif({commit}, notif) {
     commit('removeNotif', notif);
+  },
+  setRead({commit}, notif) {
+    commit('setRead', notif);
   }
-  
 };
 
 export default {

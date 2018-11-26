@@ -25,9 +25,10 @@
   import {tokenExists} from "@/router";
   import notifications from "../store/modules/notifications";
 
-  let forbiddenArray = [
+  let blacklistArray = [
     '/tags/new',
-    '/works/new'
+    '/works/new',
+    '/notifications'
   ];
 
   export default {
@@ -42,7 +43,9 @@
         logout();
       },
       openNotifications() {
-
+        this.$router.push({
+          name: 'notifications'
+        })
       }
     },
     computed: {
@@ -67,8 +70,8 @@
         if (route.meta.guest !== undefined) {
           return
         }
-        for (let i = 0; i < forbiddenArray.length; i++) {
-          if (route.path === forbiddenArray[i]) {
+        for (let i = 0; i < blacklistArray.length; i++) {
+          if (route.path === blacklistArray[i]) {
             return
           }
         }
