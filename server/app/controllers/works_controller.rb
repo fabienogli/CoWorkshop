@@ -44,10 +44,12 @@ class WorksController < ApplicationController
     @participant = User.find(params[:user_id])
     @work.users << @participant
     if @work.save
-      ActionCable.server.broadcast 'works', @work
+      ActionCable.server.broadcast "works_#{@work.user_id}", {
+          work: @work,
+          user: @participant,
+          subscribe: true,
+      }
       json_response(@work, :ok, @@includes)
-    else
-      p :swag
     end
   end
 
@@ -57,6 +59,11 @@ class WorksController < ApplicationController
     if is_current_user(@user_id)
       @user = @work.users.find(@user_id)
       @work.users.destroy(@user)
+      ActionCable.server.broadcast "works_#{@work.user_id}", {
+          work: @work,
+          user: @user,
+          subscribe: false,
+      }
       json_response(@work, :ok, @@includes)
     else
       head :forbidden

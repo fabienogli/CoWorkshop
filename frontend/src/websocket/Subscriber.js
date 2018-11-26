@@ -47,55 +47,65 @@ class Subscriber {
         return;
       }
       
-      if(message.type === 'confirm_subscription') {
+      if (message.type === 'confirm_subscription') {
         return;
       }
       
       if (message.identifier) {
-        const channel = JSON.parse(message.identifier).channel;
-        console.log(this.channels);
-        Object.keys(this.channels)
+        const {channel} = JSON.parse(message.identifier);
+        this.channels[channel].fn(message);
+        //code use to handle multiple callbacks
+        // TODO irindul 2018-11-26 : remove if not used
+        /*Object.keys(this.channels)
           .filter((chan) => chan.id === channel.id)
           .forEach(chan => {
             this.channels[chan].map(handler => handler.callback)
               .forEach(fn => fn(message));
-          });
+          });*/
+        
+        
       } else {
         this.onmessage(message);
       }
     };
   }
   
-  channelDoesNotExist(channel) {
-    return !(
-      this.channels[channel]
-      && this.channels[channel].constructor === Array
-    )
+  isOpenSocket() {
+    return this.socket.readyState === WebSocket.OPEN;
   }
   
-  subscribe(channel, id, fn, retryId) {
-    if (this.socket.readyState === WebSocket.OPEN) {
+  subscribe(channel, fn, payload, retryId) {
+    if (this.isOpenSocket()) {
+      if(retryId) {
+        clearTimeout(retryId);
+      }
+      
       const msg = {
         command: 'subscribe',
         identifier: JSON.stringify({
           channel: channel,
+          ...payload,
         }),
       };
       this.socket.send(JSON.stringify(msg));
       
-      if (this.channelDoesNotExist(channel)) {
-        this.channels[channel] = [];
-      }
-      const handler = {
-        id: 1,
-        callback: fn,
-      };
-      this.channels[channel].push(handler);
+      this.channels[channel] = {fn};
+      
+      //Code to handle multiple callback for each channel
+      //// TODO irindul 2018-11-26 : remove if not necessary
+      /* if (this.channelDoesNotExist(channel)) {
+         this.channels[channel] = [];
+       }
+       const handler = {
+         id: id,
+         callback: fn,
+       };
+       this.channels[channel].push(handler);*/
     }
     else {
       clearTimeout(retryId);
       let retryId = setTimeout(() => {
-        this.subscribe(channel, id, fn, retryId);
+        this.subscribe(channel, fn, payload, retryId);
       }, 1000);
     }
   }

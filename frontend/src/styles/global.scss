@@ -3,6 +3,9 @@
 
 @import '_variable.scss';
 
+@import "./fontawesome/scss/fontawesome.scss";
+@import "./fontawesome/scss/solid.scss";
+
 .input {
   border: 1px solid $lightGrey;
   padding: 5px;
