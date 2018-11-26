@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <router-link :to="{ name: 'work' }">Créer projet</router-link>
-    <router-link :to="{ name: 'workList' }">Liste des projets</router-link>
   </div>
 </template>
 
