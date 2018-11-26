@@ -1,27 +1,35 @@
 <template>
-  <div id="project" class="project container" @click="update">
-    <!--Mis à jour le: {{project.updated_at}}-->
-    <!--<br>-->
-    <!--Créer le : {{project.created_at}}-->
-    <p>
+  <div id="project">
+    <div  class="project container" @click="update">
       <h2>{{project.name}}</h2>
+      <div class="modal-body">
       <b>Créateur:</b> {{project.user_id}}
       <br/>
       <b>Description:</b> {{project.desc}}
-    </p>
+      </div>
+    </div>
+    <ProjectForm v-if="showModal" @close="showModal = false" :header="project.name" :title="project.name" :description="project.desc" :creator="project.userId"/>
   </div>
 </template>
 
 <script>
+  import ProjectForm from '@/components/project/ProjectForm';
   export default {
     name: "Project",
+    components: {ProjectForm},
     props: [
       'project'
     ],
     data() {
-      return {}
+      return {
+        showModal: false,
+      }
     },
     methods: {
+      update() {
+        console.log("dans update");
+        this.showModal = true;
+      }
     }
   }
 

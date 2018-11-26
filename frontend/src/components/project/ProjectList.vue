@@ -1,16 +1,16 @@
 <template>
   <div class="projectList">
     <div v-for="project in projects">
-      <Project :project="project" />
+      <ProjectPreview :project="project" />
     </div>
   </div>
 </template>
 <script>
-  import Project from '@/components/Project';
+  import ProjectPreview from '@/components/project/ProjectPreview';
   export default {
     name: "ProjectList",
     props: ['projects'],
-    components: {Project},
+    components: {ProjectPreview},
   }
 </script>
 

@@ -9,8 +9,8 @@
 </template>
 
 <script>
-  import ProjectList from '@/components/ProjectList';
-  import ProjectForm from '@/components/ProjectForm';
+  import ProjectList from '@/components/project/ProjectList';
+  import ProjectForm from '@/components/project/ProjectForm';
   import http from '@/http';
   export default {
     name: "Projects",
@@ -39,4 +39,8 @@
 </script>
 
 <style lang="scss" scoped>
+  .projects {
+    height: 100%;
+    width: 100%;
+  }
 </style>

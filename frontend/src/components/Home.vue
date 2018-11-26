@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  import Project from "@/components/Project";
   export default {
     name: 'Home',
     components:{
