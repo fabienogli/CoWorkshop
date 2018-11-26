@@ -1,9 +1,5 @@
 class WorkChannel < ApplicationCable::Channel
   def subscribed
-    stream_from 'works'
-  end
-
-  def receive(data)
-    ActionCable.server.broadcast("works", data)
+    stream_from "works_#{params[:user_id]}"
   end
 end

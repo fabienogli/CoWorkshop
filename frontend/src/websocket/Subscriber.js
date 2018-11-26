@@ -73,8 +73,12 @@ class Subscriber {
     )
   }
   
+  isOpenSocket() {
+    return this.socket.readyState === WebSocket.OPEN;
+  }
+  
   subscribe(channel, id, fn, retryId) {
-    if (this.socket.readyState === WebSocket.OPEN) {
+    if (this.isOpenSocket()) {
       const msg = {
         command: 'subscribe',
         identifier: JSON.stringify({
@@ -87,7 +91,7 @@ class Subscriber {
         this.channels[channel] = [];
       }
       const handler = {
-        id: 1,
+        id: id,
         callback: fn,
       };
       this.channels[channel].push(handler);
