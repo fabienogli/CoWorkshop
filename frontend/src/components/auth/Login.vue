@@ -12,6 +12,11 @@
              class="input password"
              id="password"
              v-model.trim="password">
+
+      <div>
+        Don't have an account ?
+        <router-link  class="register-link" to="/register"> Register now !</router-link>
+      </div>
       <div class="submit-container">
         <button type="submit" class="submit">Log in</button>
         <div class="empty"></div>

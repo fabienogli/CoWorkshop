@@ -32,6 +32,11 @@
              id="password_confirm"
              v-model.trim="password_confirm">
 
+      <div>
+        Already have an account ?
+        <router-link  class="login-link" to="/login"> Sign in now !</router-link>
+      </div>
+
       <div class="submit-container">
         <button type="submit" class="submit">Register</button>
         <div class="empty"></div>
