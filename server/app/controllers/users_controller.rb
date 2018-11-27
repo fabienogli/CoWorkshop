@@ -5,6 +5,7 @@ class UsersController < ApplicationController
                                   :destroy,
                                   :create_tags,
                                   :destroy_tags,
+                                  :show_notifications,
   ]
 
   @@includes = [:tags, :works]
@@ -63,6 +64,15 @@ class UsersController < ApplicationController
       @tag = @user.tags.find(params[:tag_id])
       @user.tags.delete(@tag)
       json_response(@user, :ok, @@includes)
+    else
+      head :forbidden
+    end
+  end
+
+  # GET /users/:id/notifications
+  def show_notifications
+    if is_current_user(@user.id)
+      json_response(@user, :ok, :notifications)
     else
       head :forbidden
     end

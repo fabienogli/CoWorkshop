@@ -1,9 +1,10 @@
 <template>
-  <div id="projects">
+  <div id="projects" class="projects">
     <h1>Projects Component</h1>
-    <button class="button create" id="show-modal" @click="showModal = true" >Créer un projet</button>
     <ProjectForm v-if="showModal" @close="showModal = false" @newProject="addWork"/>
     <ProjectList :projects="projects"/>
+    <br/>
+    <button class="button create" id="show-modal" @click="showModal = true" >Créer un projet</button>
   </div>
 </template>
 
@@ -38,4 +39,8 @@
 </script>
 
 <style lang="scss" scoped>
+  .projects {
+    height: 100%;
+    width: 100%;
+  }
 </style>

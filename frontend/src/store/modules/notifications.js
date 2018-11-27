@@ -1,16 +1,21 @@
+import http from '@/http';
+
 const state = {
   notifs: [],
+  shouldRefresh : true,
 };
 
 const getters = {
   notifs(state) {
     return state.notifs;
   },
+  shouldRefresh(state) {
+    return state.notifs;
+  }
 };
 
 const mutations = {
   addNotif(state, notif) {
-    notif.id = state.notifs.length;
     state.notifs.push(notif);
   },
   removeNotif(state, notif) {
@@ -21,8 +26,16 @@ const mutations = {
   setRead(state, notif) {
     const notification = JSON.parse(JSON.stringify(notif));
     notification.read = true;
-    state.notifs.splice(notif.id, 1, notification);
+    const index = state.notifs.findIndex((noti) => noti.id === notif.id);
+    state.notifs.splice(index, 1, notification);
+  },
+  setNotifs(state, notifs) {
+    state.notifs = notifs;
+  },
+  setRefresh(state, refresh) {
+    state.shouldRefresh = refresh;
   }
+
 };
 
 const actions = {
@@ -33,7 +46,17 @@ const actions = {
     commit('removeNotif', notif);
   },
   setRead({commit}, notif) {
-    commit('setRead', notif);
+    http.put(`/notifications/${notif.id}`, {
+      read: true,
+    }).then(() => {
+      commit('setRead', notif);
+    });
+  },
+  setNotifs({commit}, notifs) {
+    commit('setNotifs', notifs);
+  },
+  setRefresh({commit}, refresh) {
+    commit('setRefresh', refresh);
   }
 };
 

@@ -43,6 +43,8 @@ const login = (email, password) => {
     const payload = createPayload(email, password);
     axios.post(loginUrl, payload).then((response) => {
       setAuth(response.data);
+      
+      getAllNotifications(response.data.user.id);
       resolve();
     }).catch((error) => {
       reject(error);
@@ -50,8 +52,22 @@ const login = (email, password) => {
   });
 };
 
+const getAllNotifications = (user_id) => {
+  const notifUrl = `${env.url}/users/${user_id}/notifications`;
+  let config = {
+    headers: {
+      Authorization: `Bearer ${store.getters['auth/token']}`,
+    }
+  };
+  
+  axios(notifUrl, config)
+    .then((response) => {
+      const notifications = response.data.notifications;
+      store.dispatch('notification/setNotifs', notifications);
+    })
+};
+
 const logout = () => {
-  console.log("Dans logout");
   store.dispatch('auth/logout');
   Vue.cookies.remove('currentUser');
   router.push({name: 'login'});
@@ -76,4 +92,4 @@ const redirectTo = (route) => {
   router.push(route);
 };
 
-export {setStateFromCookie, loginAndRedirectTo, logout};
+export {setStateFromCookie, loginAndRedirectTo, logout, getAllNotifications};

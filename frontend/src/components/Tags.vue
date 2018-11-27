@@ -1,8 +1,9 @@
 <template>
   <div id="tags">
-    <button class="button create" id="show-modal" @click="showModal = true" >Créer un tag</button>
     <TagForm v-if="showModal" @close="showModal = false" @newTag="addTag"/>
     <Tag-list :tags="tags"/>
+    <br/>
+    <button class="button create" id="show-modal" @click="showModal = true" >Créer un tag</button>
   </div>
 </template>
 

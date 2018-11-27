@@ -1,46 +1,32 @@
 <template>
   <div id="tagForm">
-    <transition name="modal" @keydown.esc="close">
-      <div class="modal-mask">
-        <div class="modal-wrapper">
-          <div class="modal-container">
-
-            <div class="modal-header">
-              <slot name="header">
-                <h3>Create a new Tag !</h3>
-              </slot>
-            </div>
-
-            <div class="modal-body">
-              <slot name="body">
-                  <p>
-                    <label for="name">name</label>
-                    <input id="name" v-model="name" type="text" name="name">
-                  </p>
-              </slot>
-            </div>
-
-            <div class="modal-footer">
-              Créer un tag {{name}}
-              <slot name="footer">
-                <button class="modal-default-button" @click="createTag">
-                  OK
-                </button>
-              </slot>
-            </div>
-          </div>
+    <modal @close="close">
+      <h1 class="title" slot="header">Create a new Tag !</h1>
+      <div slot="body">
+        <div>
+          <label for="name">
+            <h2>name</h2>
+          </label>
+          <input id="name" class="input" v-model="name" type="text" name="name">
         </div>
       </div>
-    </transition>
+      <button slot="footer" class="modal-default-button button create" @click="createTag">
+        OK
+      </button>
+    </modal>
 
   </div>
 </template>
 
 <script>
   import http from '@/http';
+  import Modal from '@/components/Modal';
 
   export default {
     name: 'TagForm',
+    components: {
+      Modal
+    },
     data() {
       return {
         name: "",

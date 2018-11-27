@@ -1,16 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import ProjectForm from '@/components/ProjectForm'
 import store from '@/store'
 
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
 import Projects from '@/components/Projects'
-import TagForm from '@/components/TagForm'
 import Tags from '@/components/Tags'
 import NotificationDrawer from '@/components/NotificationDrawer'
+import {getAllNotifications} from "@/util";
 
 Vue.use(Router);
 
@@ -80,7 +79,7 @@ const routeRequireAuth = (route) => {
   return route.matched.some(record => record.meta.requiresAuth)
 };
 
-const routeIsGuest = (route) => {
+const routeIsGuest = (route) => {
   return route.matched.some(record => record.meta.guest)
 };
 
@@ -92,18 +91,29 @@ const tokenDoesNotExist = () => {
   return !tokenExists();
 };
 
+const refreshNotifs = () => {
+  const shouldRefresh = store.getters['notification/shouldRefresh'];
+  if(shouldRefresh) {
+    getAllNotifications(store.getters['auth/user_id']);
+    store.dispatch('notification/setRefresh', false);
+  } else {
+    console.log('didnot refresh ;)')
+  }
+};
+
 router.beforeEach((to, from, next) => {
-  if(routeRequireAuth(to)) {
+  if (routeRequireAuth(to)) {
     if (tokenDoesNotExist()) {
       next({
         path: '/login',
-        params: { nextUrl: to.fullPath}
+        params: {nextUrl: to.fullPath}
       });
     } else {
+      refreshNotifs();
       next();
     }
   } else if (routeIsGuest(to)) {
-    if(tokenDoesNotExist()) {
+    if (tokenDoesNotExist()) {
       next();
     } else {
       next(false);
