@@ -85,8 +85,7 @@
         http.post("/works", {
           "name": this.name,
           "desc": this.desc,
-          "user_id": this.userId,
-          "tags": this.tags,
+          "user_id": this.userId
         }).then(response => {
           let project = response.data;
           project.tags = this.saveTags(project.id);
@@ -95,7 +94,41 @@
         });
       },
       update() {
-        //@TODO
+        let addr = "/works/" + this.project.id;
+        http.put(addr, {
+          "name": this.name,
+          "desc": this.desc,
+        }).then(response => {
+          let project = response.data;
+          let oldTags = project.tags;
+          project.tags = this.saveTags(project.id);
+          let diffBetween = this.diffBetween(oldTags, project.tags);
+          oldTags.forEach(tag => {
+            if (tags_id.indexOf(tag.id) < 0) {
+              let addr = "/works/" + project.id + "/tags/" + tag.id;
+              http.delete(addr, {}).then(e => {console.log(e)});
+            }
+          });
+          this.$emit('updateProject', project);
+          this.close();
+        });
+      },
+      diffBetween(_before, after) {    //Enough to do the same function -> we supposed both have an id
+        console.log("dans diffBetween");
+        let newItems = [];
+        let before = _before.map(item => { return item.id});
+        after.forEach(item => {
+          let index = before.indexOf(item.id);
+          if ( index !== -1) {
+            return;
+          }
+          newItems.push(item.id);
+          before.slice(index, 1);
+        });
+        return {
+          new: newItems,
+          old: before,
+        }
       },
       saveTags(projectId) {
         let tags = this.$refs.tagInput.getTags();
