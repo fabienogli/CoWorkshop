@@ -5,7 +5,7 @@
          :class="isRead(notif)"
          @click="notifClicked(notif)"
     >
-      {{notif}}
+      {{notif.title}}
     </div>
   </div>
 </template>
@@ -22,6 +22,9 @@
       },
       notifClicked(notif) {
         this.$store.dispatch('notification/setRead', notif);
+        if(notif.redirects_to) {
+          this.$router.push(notif.redirects_to);
+        }
       }
     },
     computed: {
