@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import ProjectForm from '@/components/ProjectForm'
 import store from '@/store'
 
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
 import Projects from '@/components/Projects'
-import TagForm from '@/components/TagForm'
+import ProjectPreview from '@/components/ProjectPreview'
 import Tags from '@/components/Tags'
 import NotificationDrawer from '@/components/NotificationDrawer'
 

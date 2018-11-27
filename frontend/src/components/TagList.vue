@@ -11,10 +11,6 @@
         <td>{{tag.name}}</td>
         <td>{{tag.created_at}}</td>
         <td>{{tag.updated_at}}</td>
-        <td>
-          <button class="button update">Update</button>
-          <button class="button delete">Delete</button>
-        </td>
       </tr>
     </table>
   </div>

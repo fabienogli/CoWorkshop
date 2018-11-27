@@ -51,7 +51,6 @@ const login = (email, password) => {
 };
 
 const logout = () => {
-  console.log("Dans logout");
   store.dispatch('auth/logout');
   Vue.cookies.remove('currentUser');
   router.push({name: 'login'});

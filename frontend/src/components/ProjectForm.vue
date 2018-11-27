@@ -1,55 +1,72 @@
 <template>
   <div id="projectForm">
-    <transition name="modal" @keydown.esc="close">
-      <div class="modal-mask" @click="close">
-        <div class="modal-wrapper">
-          <div class="modal-container" @click.stop="">
-
-            <div class="modal-header">
-              <slot name="header">
-                <h3>Create a new Project ! </h3>
-              </slot>
-            </div>
-            <div class="modal-body">
-              <slot name="body">
-                <p>
-                <label for="name">name</label>
-                <input id="name" v-model="name" type="text" name="name">
-                </p>
-                <p>
-                <label for="desc">Description</label>
-                <input id="desc" v-model="desc" type="text" name="desc">
-                </p>
-              </slot>
-            </div>
-
-            <div class="modal-footer">
-              Créer un Project {{name}}
-              <slot name="footer">
-                <button class="modal-default-button" @click="createProject">
-                  OK
-                </button>
-              </slot>
-            </div>
-          </div>
+    <modal @close="close">
+      <h1 slot="header" class="title">{{top}}</h1>
+      <div slot="body">
+        <div class="name">
+          <label for="name"><h2>Name</h2></label>
+          <input class="input" id="name" v-model="name" type="text" name="name">
         </div>
+        <div class="description">
+          <label for="desc"><h3>Description</h3></label>
+          <input class="input" id="desc" v-model="desc" type="text" name="desc">
+        </div>
+        <TagInput :tags="project.tags" ref="tagInput"/>
       </div>
-    </transition>
+      <button v-if="project.userId==0" slot="footer" class="modal-default-button button create" @click="create">
+        Create
+      </button>
+      <button v-if="project.userId!=0" slot="footer" class="modal-default-button button create" @click="update">
+        Update
+      </button>
+    </modal>
   </div>
 </template>
 
 <script>
   import http from '@/http';
+  import Modal from '@/components/Modal';
+  import TagInput from '@/components/TagInput';
 
   export default {
     name: 'ProjectForm',
+    components: {
+      Modal,
+      TagInput
+    },
+    props: {
+      header: {
+        default: "Create a new Project !",
+        type: String
+      },
+      project: {
+        default: function () {
+          return {
+            name: "",
+            desc : "",
+            userId: 0,
+            tags: [],
+          }
+        },
+      },
+    },
     data() {
       return {
-        name: "",
-        desc: "",
-        password: "",
-        userId: 0,
+        top : this.header,
+        name: this.project.name,
+        desc: this.project.desc,
+        userId: this.project.user_id,
+        tags: this.project.tags,
       }
+    },
+    watch: {
+      name(newValue, old) {
+        if (newValue === "") {
+          this.top = "Project title";
+          return;
+        }
+        this.top = newValue;
+      },
     },
     methods: {
       checkForm() {
@@ -62,19 +79,38 @@
       raz() {
         this.name = "";
         this.desc = "";
-        this.password = "";
         this.userId = 0;
       },
-      createProject() {
+      create() {
         http.post("/works", {
           "name": this.name,
           "desc": this.desc,
           "user_id": this.userId,
+          "tags": this.tags,
         }).then(response => {
-          this.$emit('newProject', response.data);
+          let project = response.data;
+          project.tags = this.saveTags(project.id);
+          this.$emit('newProject', project);
           this.close();
-        })
-      }
+        });
+      },
+      update() {
+        //@TODO
+      },
+      saveTags(projectId) {
+        let tags = this.$refs.tagInput.getTags();
+        if (tags.length < 1) {
+          return [];
+        }
+        let tagsId = tags.map(tag => {
+          return tag.id;
+        });
+        let addr = "/works/" + projectId + "/tags";
+        http.post(addr, {
+          "tag_id": tagsId,
+        });
+        return tags
+      },
     },
     mounted() {
       let user = this.$cookies.get("currentUser");
