@@ -59,7 +59,6 @@
     },
     methods: {
       update() {
-        console.log("dans update");
         this.showModal = true;
       },
       close() {

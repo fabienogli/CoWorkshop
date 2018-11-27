@@ -2,14 +2,23 @@
   <div id="tagInput">
     <div class="tags">
       <label><h3>Tags</h3></label>
-      <div class="input input-container">
+      <div class="input input-container" @click="setFocus">
         <div class="tag-selected" v-for="tag in tags">
           {{tag.name}} <i class="fas fa-times" @click="remove(tag)"></i>
         </div>
-        <input class="tag-input" v-model="search" @blur="inputBlur" @focus="focus = true" @keydown.enter="select('clickonenter')" @keydown.down.prevent="selected ++">
+        <input class="tag-input" ref="input"
+               v-model="search"
+               @focus="focus = true"
+               @blur="inputBlur"
+               @keydown.enter="keySelect" @keydown.tab.prevent="keySelect"
+               @keyup.up.prevent="up" @keyup.down.prevent="down" @keyup.delete="deleteTag"
+        >
       </div>
       <div class="input" v-if="focus && dbTags.length > 0">
-        <div class="item" v-for="(tag, index) in matches" @click.prevent="select(tag)" >
+        <div :class="{item: true, selected: index === selected}" v-for="(tag, index) in matches"
+             @mousedown.prevent="select(tag)"
+             @mouseover="setSelected(index)"
+        >
           {{tag.name}}
         </div>
       </div>
@@ -23,32 +32,32 @@
   export default {
     name: "TagInput",
     props: {
-      usedTags: function () {
-        return {
-          default: [],
-          type: Array,
+      tags: {
+        default: function() {
+            return [];
         }
-      }
+      },
     },
     data() {
       return {
         dbTags: [],
         search: '',
-        selected: -1,
-        test: "Tag",
-        tags: [],
+        selected: 0,
         focus: false,
       }
     },
     methods: {
+      keySelect() {
+        let matches = this.filterTag();
+        this.select(matches[this.selected]);
+      },
       select(tag) {
         this.search = "";
         this.swap(tag, this.dbTags, this.tags);
-        this.$emit('add', tag);
+        this.setFocus()
       },
       remove(tag) {
         this.swap(tag, this.tags, this.dbTags);
-        this.$emit('remove', tag);
       },
       swap(tag, from, to) {
         let index = from.indexOf(tag);
@@ -64,18 +73,48 @@
           self.focus = false;
         }, 250);
       },
+      getTags() {
+        return this.tags;
+      },
+      setFocus() {
+        this.focus = true;
+        this.$refs.input.focus();
+      },
+      filterTag() {
+        return this.dbTags.filter((tag) => {
+          return tag.name.indexOf(this.search) >= 0
+        });
+      },
+      down() {
+        if (this.selected === this.dbTags.length - 1) {
+          return;
+        }
+        this.selected ++;
+      },
+      up() {
+        if (this.selected === -1) {
+          return;
+        }
+        this.selected --;
+      },
+      setSelected(index) {
+        this.selected = index;
+        this.setFocus();
+      },
+      deleteTag() {
+        let lastTag = this.tags.length - 1;
+        if (this.search !== "" && lastTag > -1) {
+          return;
+        }
+        this.remove(this.tags[lastTag]);
+      }
     },
     computed: {
       matches() {
-        return this.dbTags.filter((obj) => {
-          return obj.name.indexOf(this.search) >= 0
-        });
+        return this.filterTag();
       }
     },
     mounted() {
-      window.addEventListener('keydown', (e) => {
-        let key = e.which || e.keyCode;
-      });
       http.get("/tags")
         .then(response => {
           this.dbTags = response.data;
@@ -92,7 +131,7 @@
     padding: 5px;
     border-radius: 3px;
   }
-  .item:hover {
+  .item.selected{
     background-color: $accentColor;
     cursor: pointer;
   }
@@ -109,9 +148,12 @@
     padding: 10px 10px;
   }
   .tag-input {
-    border-radius: 4px;
+    padding: 10px 10px;
+    -webkit-appearance: none;
+    border: none;
 
   }
   .tag-input:focus {
+    outline: none;
   }
 </style>

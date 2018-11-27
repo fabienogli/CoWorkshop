@@ -11,12 +11,12 @@
           <label for="desc"><h3>Description</h3></label>
           <input class="input" id="desc" v-model="desc" type="text" name="desc">
         </div>
-        <TagInput :tags="project.tags" @add="addTag" @remove="removeTag"/>
+        <TagInput :usedTags="project.tags" ref="tagInput"/>
       </div>
-      <button v-if="userId===0" slot="footer" class="modal-default-button button create" @click="create">
-        OK
+      <button v-if="project.userId==0" slot="footer" class="modal-default-button button create" @click="create">
+        Create
       </button>
-      <button v-if="userId!==0" slot="footer" class="modal-default-button button create" @click="update">
+      <button v-if="project.userId!=0" slot="footer" class="modal-default-button button create" @click="update">
         Update
       </button>
     </modal>
@@ -44,10 +44,7 @@
           return {
             name: "",
             desc : "",
-            userId: {
-              default: 0,
-              type: Number
-            },
+            userId: 0,
             tags: [],
           }
         },
@@ -59,7 +56,7 @@
         name: this.project.name,
         desc: this.project.desc,
         userId: this.project.user_id,
-        tags: [],
+        tags: this.project.tags,
       }
     },
     watch: {
@@ -72,9 +69,6 @@
       },
     },
     methods: {
-      onChildUpdate(value) {
-        console.log(value);
-      },
       checkForm() {
         return true;
       },
@@ -92,28 +86,28 @@
           "name": this.name,
           "desc": this.desc,
           "user_id": this.userId,
+          "tags": this.tags,
         }).then(response => {
           this.$emit('newProject', response.data);
           this.close();
         });
       },
       update() {
-        console.log("dans update de project");
-        console.log(this.getTags())
+        console.log("dans Update ProjectForm");
+        console.log(this.$refs.tagInput.getTags());
+
+        // let addr = "/works/" + this.userId + "/users";
+        // let tags_id = [];
+        // this.tags.forEach(tag => {
+        //   tags_id.push(tag.id);
+        // });
+        // http.post(addr, {
+        //   "tags_id": this.tags_id,
+        // }).then(response => {
+        //   // this.$emit('newProject', response.data);
+        //   this.close();
+        // });
       },
-      addTag(e) {
-        console.log("dans projectForm dans add tag");
-        this.tags.push(e);
-        console.log(this.tags);
-      },
-      removeTag(e) {
-        let index = this.tags.indexOf(e);
-        if (this.tags.length === 1) {
-          this.tags = [];
-          return;
-        }
-        this.tags.slice(index, 1);
-      }
     },
     mounted() {
       let user = this.$cookies.get("currentUser");
