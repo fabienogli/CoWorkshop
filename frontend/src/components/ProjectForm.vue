@@ -11,9 +11,13 @@
           <label for="desc"><h3>Description</h3></label>
           <input class="input" id="desc" v-model="desc" type="text" name="desc">
         </div>
+        <TagInput :tags="project.tags" @add="addTag" @remove="removeTag"/>
       </div>
-      <button slot="footer" class="modal-default-button" @click="createProject">
+      <button v-if="userId===0" slot="footer" class="modal-default-button button create" @click="create">
         OK
+      </button>
+      <button v-if="userId!==0" slot="footer" class="modal-default-button button create" @click="update">
+        Update
       </button>
     </modal>
   </div>
@@ -21,36 +25,41 @@
 
 <script>
   import http from '@/http';
-  import Modal from '@/components/Modal'
-  let defaultString = {
-    default: "",
-    type: String,
-  };
+  import Modal from '@/components/Modal';
+  import TagInput from '@/components/TagInput';
 
   export default {
     name: 'ProjectForm',
     components: {
-      Modal
+      Modal,
+      TagInput
     },
     props: {
       header: {
         default: "Create a new Project !",
         type: String
       },
-      title: defaultString,
-      description: defaultString,
-      creator: {
-        default: 0,
-        type: Number
-      }
-
+      project: {
+        default: function () {
+          return {
+            name: "",
+            desc : "",
+            userId: {
+              default: 0,
+              type: Number
+            },
+            tags: [],
+          }
+        },
+      },
     },
     data() {
       return {
         top : this.header,
-        name: this.title,
-        desc: this.description,
-        userId: this.creator,
+        name: this.project.name,
+        desc: this.project.desc,
+        userId: this.project.user_id,
+        tags: [],
       }
     },
     watch: {
@@ -63,6 +72,9 @@
       },
     },
     methods: {
+      onChildUpdate(value) {
+        console.log(value);
+      },
       checkForm() {
         return true;
       },
@@ -75,7 +87,7 @@
         this.desc = "";
         this.userId = 0;
       },
-      createProject() {
+      create() {
         http.post("/works", {
           "name": this.name,
           "desc": this.desc,
@@ -83,7 +95,24 @@
         }).then(response => {
           this.$emit('newProject', response.data);
           this.close();
-        })
+        });
+      },
+      update() {
+        console.log("dans update de project");
+        console.log(this.getTags())
+      },
+      addTag(e) {
+        console.log("dans projectForm dans add tag");
+        this.tags.push(e);
+        console.log(this.tags);
+      },
+      removeTag(e) {
+        let index = this.tags.indexOf(e);
+        if (this.tags.length === 1) {
+          this.tags = [];
+          return;
+        }
+        this.tags.slice(index, 1);
       }
     },
     mounted() {

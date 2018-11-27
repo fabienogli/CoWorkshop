@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-  import ProjectPreview from '@/components/project/ProjectPreview';
+  import ProjectPreview from '@/components/ProjectPreview';
   export default {
     name: "ProjectList",
     props: ['projects'],

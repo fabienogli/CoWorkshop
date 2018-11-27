@@ -82,13 +82,14 @@
 </script>
 
 <style lang="scss">
+  @import "~@/styles/_variable";
 
   ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #40a6d1;
+    background-color: $accentColor;
   }
 
   li {
