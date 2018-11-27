@@ -81,6 +81,11 @@ class WorksController < ApplicationController
       @tag = Tag.find(params[:tag_id])
       @work.tags << @tag
       json_response(@work, :ok, @@includes)
+      ActionCable.server.broadcast "tags_#{@tag.name}", {
+          work: @work,
+          tag: @tag,
+          created: 'true'
+      }
     else
       head :forbidden
     end
