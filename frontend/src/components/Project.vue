@@ -10,7 +10,7 @@
           <br/>
           <b>Description:</b> {{project.desc}}
         </p>
-        <div v-if="project.users.length > 0" class="participants">
+        <div class="participants">
           Participants:
           <div class="participant" v-for="user in project.users">
             <p>
@@ -18,12 +18,14 @@
             </p>
           </div>
         </div>
-        <div v-if="project.tags.length > 0" class="tags">
-          Tags:
-          <div class="tags" v-for="tag in project.tags">
-            {{tag}}
+        <div v-if="project.tags.length > 0" class="tag-container">
+          <div class="subtitle">Tags:</div>
+          <div class="tag" v-for="tag in project.tags">
+            {{tag.name}}
           </div>
         </div>
+      </div>
+      <div slot="footer">
         <button v-if="isCreator" @click="update" class="button update">
           Update
         </button>
@@ -55,6 +57,7 @@
         participate: false,
         isCreator : false,
         userId: 0,
+        users: [],
       }
     },
     methods: {
@@ -63,11 +66,14 @@
       },
       close() {
         this.$emit('close');
-        console.log(this.project);
       },
       checkIfParticipate() {
+        if (this.project.users === undefined) {
+          return;
+        }
         let users = this.project.users;
         for (let i= 0; i < users.length; i ++) {
+          console.log(users[i]);
           if (users[i].id === this.userId) {
             this.participate = true;
             return;
@@ -76,7 +82,6 @@
       },
       joinWork() {
         let addr = "/works/" + this.project.id + "/users";
-        console.log(addr);
         http.post(addr, {
           "user_id": this.userId,
         }).then(response => {
@@ -95,8 +100,26 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "~@/styles/_variable";
 
   .button {
     float: right;
+  }
+
+  .tag {
+    border: 1px solid $accentColor;
+    background-color: $accentColor;
+    border-radius: 4px;
+    padding: 10px 10px;
+  }
+  .tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .subtitle {
+    flex: 0 0 100%;
+    font-weight: bold;
+    padding: 1px ;
   }
 </style>

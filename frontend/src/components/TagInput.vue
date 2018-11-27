@@ -2,7 +2,7 @@
   <div id="tagInput">
     <div class="tags">
       <label><h3>Tags</h3></label>
-      <div class="input input-container" @click="setFocus">
+      <div class="input input-container" @mousedown.prevent="setFocus">
         <div class="tag-selected" v-for="tag in tags">
           {{tag.name}} <i class="fas fa-times" @click="remove(tag)"></i>
         </div>
@@ -107,7 +107,7 @@
           return;
         }
         this.remove(this.tags[lastTag]);
-      }
+      },
     },
     computed: {
       matches() {
@@ -142,8 +142,8 @@
     align-items: stretch;
   }
   .tag-selected {
-    /*flex: 1;*/
     border: 1px solid $accentColor;
+    background-color: $accentColor;
     border-radius: 4px;
     padding: 10px 10px;
   }

@@ -103,5 +103,8 @@
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
   }
+  .modal-body {
+    padding: 5px 2px;
+  }
 
 </style>

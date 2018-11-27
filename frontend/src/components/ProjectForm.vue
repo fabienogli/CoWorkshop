@@ -11,7 +11,7 @@
           <label for="desc"><h3>Description</h3></label>
           <input class="input" id="desc" v-model="desc" type="text" name="desc">
         </div>
-        <TagInput :usedTags="project.tags" ref="tagInput"/>
+        <TagInput :tags="project.tags" ref="tagInput"/>
       </div>
       <button v-if="project.userId==0" slot="footer" class="modal-default-button button create" @click="create">
         Create
@@ -88,25 +88,28 @@
           "user_id": this.userId,
           "tags": this.tags,
         }).then(response => {
-          this.$emit('newProject', response.data);
+          let project = response.data;
+          project.tags = this.saveTags(project.id);
+          this.$emit('newProject', project);
           this.close();
         });
       },
       update() {
-        console.log("dans Update ProjectForm");
-        console.log(this.$refs.tagInput.getTags());
-
-        // let addr = "/works/" + this.userId + "/users";
-        // let tags_id = [];
-        // this.tags.forEach(tag => {
-        //   tags_id.push(tag.id);
-        // });
-        // http.post(addr, {
-        //   "tags_id": this.tags_id,
-        // }).then(response => {
-        //   // this.$emit('newProject', response.data);
-        //   this.close();
-        // });
+        //@TODO
+      },
+      saveTags(projectId) {
+        let tags = this.$refs.tagInput.getTags();
+        if (tags.length < 1) {
+          return [];
+        }
+        let tagsId = tags.map(tag => {
+          return tag.id;
+        });
+        let addr = "/works/" + projectId + "/tags";
+        http.post(addr, {
+          "tag_id": tagsId,
+        });
+        return tags
       },
     },
     mounted() {
