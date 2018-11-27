@@ -5,26 +5,40 @@
         <th>Nom</th>
         <th>Created At</th>
         <th>Updated At</th>
-        <th/>
+        <th></th>
       </tr>
       <tr v-for="tag in tags">
         <td>{{tag.name}}</td>
         <td>{{tag.created_at}}</td>
         <td>{{tag.updated_at}}</td>
+        <td><button class="button create" @click="subscribeTag(tag.id)">S'abonner</button></td>
       </tr>
     </table>
   </div>
 </template>
 <script>
-
+  import http from '@/http';
   export default {
     name: "TagList",
     props: ['tags'],
     data() {
       return {
+        userId: 0,
       }
     },
     methods: {
+      subscribeTag(tagId) {
+        let addr = "/users/" + this.userId + "/tags"
+        http.post(addr, {
+          "tag_id": tagId
+        }).then(response => {
+          console.log(response);
+        })
+      }
+    },
+    mounted() {
+      let user = this.$cookies.get("currentUser");
+      this.userId = user.id;
     },
   }
 </script>
