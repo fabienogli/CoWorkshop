@@ -44,11 +44,13 @@ class WorksController < ApplicationController
     @participant = User.find(params[:user_id])
     @work.users << @participant
     if @work.save
-      ActionCable.server.broadcast "works_#{@work.user_id}", {
-          work: @work,
-          user: @participant,
-          subscribe: true,
-      }
+      if @work.user_id != @participant.id
+        ActionCable.server.broadcast "works_#{@work.user_id}", {
+            work: @work,
+            user: @participant,
+            subscribe: true,
+        }
+      end
       create_notification(true, @work, User.find(@work.user_id))
       json_response(@work, :ok, @@includes)
     end
@@ -60,11 +62,13 @@ class WorksController < ApplicationController
     if is_current_user(@user_id)
       @user = @work.users.find(@user_id)
       @work.users.destroy(@user)
+      if @work.user_id != @participant.id
       ActionCable.server.broadcast "works_#{@work.user_id}", {
           work: @work,
           user: @user,
           subscribe: false,
       }
+      end
       create_notification(false, @work, User.find(@work.user_id))
       json_response(@work, :ok, @@includes)
     else
