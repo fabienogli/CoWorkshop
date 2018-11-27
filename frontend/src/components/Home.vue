@@ -14,6 +14,7 @@
         msg: 'CoWorkshop'
       }
     },
+
     methods: {
       handleWorkWebsocket(data) {
         const {work, user, subscribe } = data.message;
@@ -25,16 +26,18 @@
       },
       onSubscribe(work, user) {
         const title = `${user.pseudo} is participating to your work  ${work.name} !`;
-        this.createAndDispatchNotification(title);
+        this.createAndDispatchNotification(title, '/works');
       },
       onUnsubscribe(work, user) {
         const title = `${user.pseudo} is not participating to your work ${work.name} anymore !`;
-        this.createAndDispatchNotification(title);
+        this.createAndDispatchNotification(title, '/works');
       },
-      createAndDispatchNotification(title) {
+      createAndDispatchNotification(title, redirects_to) {
         const notif = {
           title,
           read: false,
+          user_id: this.$store.getters['auth/user_id'],
+          redirects_to
         };
         this.$store.dispatch('notification/addNotif', notif);
       }

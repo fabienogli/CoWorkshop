@@ -4,7 +4,7 @@ class CreateNotifications < ActiveRecord::Migration[5.2]
       t.string :title
       t.string :redirects_to
       t.boolean :read
-      t.references :users, foreign_key: true
+      t.references :user, foreign_key: true
 
       t.timestamps
     end

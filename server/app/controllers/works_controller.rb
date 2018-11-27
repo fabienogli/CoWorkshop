@@ -49,6 +49,7 @@ class WorksController < ApplicationController
           user: @participant,
           subscribe: true,
       }
+      create_notification(true, @work, User.find(@work.user_id))
       json_response(@work, :ok, @@includes)
     end
   end
@@ -64,6 +65,7 @@ class WorksController < ApplicationController
           user: @user,
           subscribe: false,
       }
+      create_notification(false, @work, User.find(@work.user_id))
       json_response(@work, :ok, @@includes)
     else
       head :forbidden
@@ -99,5 +101,22 @@ class WorksController < ApplicationController
 
   def set_work
     @work = Work.find(params[:id])
+  end
+
+
+  def create_notification(subscribe, work, user)
+    if subscribe
+      @title = "#{user.pseudo} is participating to your work #{work.name} !"
+    else
+      @title = "#{user.pseudo} is not participating to your work #{work.name} anymore !"
+    end
+    p user
+    @notif = {
+        title: @title,
+        redirects_to: '/works',
+        read: false,
+        user_id: user.id
+    }
+    Notification.create!(@notif)
   end
 end

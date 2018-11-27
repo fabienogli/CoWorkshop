@@ -1,3 +1,5 @@
+import http from '@/http';
+
 const state = {
   notifs: [],
 };
@@ -10,7 +12,6 @@ const getters = {
 
 const mutations = {
   addNotif(state, notif) {
-    notif.id = state.notifs.length;
     state.notifs.push(notif);
   },
   removeNotif(state, notif) {

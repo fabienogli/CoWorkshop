@@ -19,10 +19,10 @@ ActiveRecord::Schema.define(version: 2018_11_27_170417) do
     t.string "title"
     t.string "redirects_to"
     t.boolean "read"
-    t.bigint "users_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_notifications_on_users_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -70,6 +70,6 @@ ActiveRecord::Schema.define(version: 2018_11_27_170417) do
     t.index ["user_id"], name: "index_works_on_user_id"
   end
 
-  add_foreign_key "notifications", "users", column: "users_id"
+  add_foreign_key "notifications", "users"
   add_foreign_key "works", "users"
 end
