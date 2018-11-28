@@ -9,7 +9,7 @@
         <div class="input-container">
           <input class="input" placeholder="Description" id="desc" v-model="desc" type="text" name="desc">
         </div>
-        <TagInput :tags="project.tags" ref="tagInput"/>
+        <TagInput :tags="tags" ref="tagInput"/>
       </div>
       <button v-if="project.userId==0" slot="footer" class="modal-default-button button create" @click="create">
         Create
@@ -54,7 +54,7 @@
         name: this.project.name,
         desc: this.project.desc,
         userId: this.project.user_id,
-        tags: this.project.tags,
+       // tags: this.project.tags,
       }
     },
     watch: {
@@ -65,6 +65,11 @@
         }
         this.top = newValue;
       },
+    },
+    computed: {
+      tags() {
+        return JSON.parse(JSON.stringify(this.project.tags));
+      }
     },
     methods: {
       checkForm() {
@@ -100,11 +105,13 @@
           "desc": this.desc,
         }).then(response => { //@TODO notify user
           const project = response.data;
-          const oldTags = project.tags.map(tag => tag.id);
-          const newTags = this.$refs.tagInput.getTags().map(tag => tag.id);
+          const oldTags = project.tags;
+          const oldTagsId = oldTags.map(tag => tag.id);
+          const newTags = this.$refs.tagInput.getTags();
+          const newTagsId = newTags.map(tag => tag.id);
 
-          const toRemove = this.diff(oldTags, newTags);
-          const toAdd = this.diff(newTags, oldTags);
+          const toRemove = this.diff(oldTagsId, newTagsId);
+          const toAdd = this.diff(newTagsId, oldTagsId);
 
           toRemove.forEach(tagId => {
             http.delete(`/works/${project.id}/tags/${tagId}`)
@@ -118,7 +125,9 @@
           project.tags = newTags;
           this.$store.dispatch('works/updateWork', project);
           this.close();
-        });
+        }).catch((error) => {
+          console.log(error);
+        })
       },
       diff(first, second) {
         return first.filter(it => second.indexOf(it) === -1);

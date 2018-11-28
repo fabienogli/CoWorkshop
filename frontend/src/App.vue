@@ -34,7 +34,9 @@
           if(added) {
             this.$store.dispatch('works/addWork', work);
           } else if(updated) {
-            this.$store.dispatch('works/updateWork', work);
+            if(work.user_id !== this.userId){
+              this.$store.dispatch('works/updateWork', work);
+            }
           } else {
             this.$store.dispatch('works/removeWork', work);
           }

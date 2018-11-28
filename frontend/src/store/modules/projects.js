@@ -27,6 +27,7 @@ const mutations = {
   updateWork(state, work) {
     const index = state.works.findIndex((worki) => worki.id === work.id);
     state.works.splice(index, 1, work);
+    console.log(state.works);
   }
 };
 
