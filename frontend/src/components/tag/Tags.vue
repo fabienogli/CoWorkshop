@@ -1,10 +1,17 @@
 <template>
   <div id="tags">
-    <TagForm v-if="showModal" @close="showModal = false" @newTag="addTag"/>
-    <Tag-list :style="created" :tags="tags" :button="'sub'" @action="subs"/>
+    <div class="create-tag-container">
+      <p>Not enough Tags, create your own !</p>
+      <div class="button-container">
+
+        <button class="button update" id="show-modal" @click="showModal = true" >Create a Tag</button>
+      </div>
+
+    </div>
+      <TagForm v-if="showModal" @close="showModal = false" @newTag="addTag"/>
+    <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
     <br/>
     <subscribed-tags ref="subscription"/>
-    <button class="button create" id="show-modal" @click="showModal = true" >Créer un tag</button>
   </div>
 </template>
 
@@ -56,4 +63,13 @@
 </script>
 
 <style scoped>
+  .button-container {
+    padding: 2px 10px;
+  }
+  .create-tag-container {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
 </style>

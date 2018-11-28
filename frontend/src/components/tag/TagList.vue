@@ -11,7 +11,7 @@
         <td>{{tag.name}}</td>
         <td>{{tag.created_at}}</td>
         <td>{{tag.updated_at}}</td>
-        <td><button :class="button" @click="action(tag)">{{button}}</button></td>
+        <td><button :class="['button', design]" @click="action(tag)">{{button}}</button></td>
       </tr>
     </table>
   </div>
@@ -20,7 +20,7 @@
   import http from '@/http';
   export default {
     name: "TagList",
-    props: ['tags', 'button', 'style'],
+    props: ['tags', 'button', 'design'],
     methods: {
       action(tag) {
         this.$emit('action', tag);
