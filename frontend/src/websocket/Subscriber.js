@@ -48,6 +48,8 @@ class Subscriber {
       }
       
       if (message.type === 'confirm_subscription') {
+        console.log('Subscription confirmed for ')
+        console.log(message.identifier);
         return;
       }
       
@@ -76,10 +78,6 @@ class Subscriber {
   
   subscribe(channel, fn, payload, retryId) {
     if (this.isOpenSocket()) {
-      if(retryId) {
-        clearTimeout(retryId);
-      }
-      
       const msg = {
         command: 'subscribe',
         identifier: JSON.stringify({

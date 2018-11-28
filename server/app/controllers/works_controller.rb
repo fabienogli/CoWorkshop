@@ -51,7 +51,7 @@ class WorksController < ApplicationController
             subscribe: true,
         }
       end
-      create_notification(true, @work, User.find(@work.user_id))
+      create_notification(true, @work, @participant)
       json_response(@work, :ok, @@includes)
     end
   end
@@ -63,13 +63,13 @@ class WorksController < ApplicationController
       @user = @work.users.find(@user_id)
       @work.users.destroy(@user)
       if @work.user_id != @participant.id
-      ActionCable.server.broadcast "works_#{@work.user_id}", {
-          work: @work,
-          user: @user,
-          subscribe: false,
-      }
+        ActionCable.server.broadcast "works_#{@work.user_id}", {
+            work: @work,
+            user: @user,
+            subscribe: false,
+        }
       end
-      create_notification(false, @work, User.find(@work.user_id))
+      create_notification(false, @work, @user)
       json_response(@work, :ok, @@includes)
     else
       head :forbidden
@@ -78,14 +78,20 @@ class WorksController < ApplicationController
 
   def bind_tags
     if is_current_user(@work.user.id)
-      @tag = Tag.find(params[:tag_id])
-      @work.tags << @tag
+      @tags = Tag.find(params[:tag_id])
+      @work.tags << @tags
+
+      @tags.each do |tag|
+        p "broadcasting to tags_#{tag[:name]}"
+        ActionCable.server.broadcast "tags_#{tag[:name]}", {
+            work: @work,
+            tag: tag,
+        }
+        create_tag_notifications(@work, tag)
+      end
       json_response(@work, :ok, @@includes)
-      ActionCable.server.broadcast "tags_#{@tag.name}", {
-          work: @work,
-          tag: @tag,
-          created: 'true'
-      }
+
+
     else
       head :forbidden
     end
@@ -112,6 +118,20 @@ class WorksController < ApplicationController
     @work = Work.find(params[:id])
   end
 
+  def create_tag_notifications(work, tag)
+    notifs = Array.new
+    title = "A new project (#{work.name}) was created with the tag #{tag.name} that you follow !"
+    tag.users.each do | user |
+      notif = {
+          title: title,
+          redirects_to: '/works',
+          read: false,
+          user_id: user.id
+      }
+      notifs << notif
+    end
+    Notification.create(notifs);
+  end
 
   def create_notification(subscribe, work, user)
     if subscribe
@@ -119,12 +139,11 @@ class WorksController < ApplicationController
     else
       @title = "#{user.pseudo} is not participating to your work #{work.name} anymore !"
     end
-    p user
     @notif = {
         title: @title,
         redirects_to: '/works',
         read: false,
-        user_id: user.id
+        user_id: work.user_id
     }
     Notification.create!(@notif)
   end

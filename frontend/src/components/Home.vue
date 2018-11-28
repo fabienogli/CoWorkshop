@@ -52,8 +52,8 @@
 
       http.get(`/users/${this.$store.getters['auth/user_id']}`)
         .then(response => {
-          this.$subscriber.subscribe('TagChannel', () => {
-            console.log('new message on the stream yeah');
+          this.$subscriber.subscribe('TagChannel', (message) => {
+            console.log('new message on the stream yeah', message);
           }, {
             tags: response.data.tags
           })

@@ -1,11 +1,7 @@
 class TagChannel < ApplicationCable::Channel
   def subscribed
     params[:tags].each do | tag |
-      stream_from "tag_#{tag}"
+      stream_from "tags_#{tag[:name]}"
     end
-  end
-
-  def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
   end
 end
