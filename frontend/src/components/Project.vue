@@ -73,7 +73,6 @@
         }
         let users = this.project.users;
         for (let i= 0; i < users.length; i ++) {
-          console.log(users[i]);
           if (users[i].id === this.userId) {
             this.participate = true;
             return;
