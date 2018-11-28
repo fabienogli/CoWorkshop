@@ -52,8 +52,10 @@
 
       http.get(`/users/${this.$store.getters['auth/user_id']}`)
         .then(response => {
-          this.$subscriber.subscribe('TagChannel', (message) => {
-            console.log('new message on the stream yeah', message);
+          this.$subscriber.subscribe('TagChannel', (data) => {
+            const {tag, work} = data.message;
+            const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`
+            this.createAndDispatchNotification(title, '/works');
           }, {
             tags: response.data.tags
           })
