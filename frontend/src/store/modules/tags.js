@@ -25,7 +25,7 @@ const mutations = {
   },
   updateTag(state, tag) {
     const index = state.tags.findIndex((tagi) => tagi.id === tag.id);
-    state.notifs.splice(index, 1, tag);
+    state.tags.splice(index, 1, tag);
   }
 };
 
@@ -40,7 +40,7 @@ const actions = {
     commit('removeTag', tag)
   },
   updateTag({commit}, tag) {
-    commit('tag', tag);
+    commit('updateTag', tag);
   }
 };
 

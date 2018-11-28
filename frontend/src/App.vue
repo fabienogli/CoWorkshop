@@ -27,12 +27,28 @@
     },
     methods: {
       handleWorkWebsocket(data) {
-        const {work, user, subscribe} = data.message;
-        if (subscribe === true) {
-          this.onSubscribe(work, user);
-        } else if (subscribe === false) {
-          this.onUnsubscribe(work, user);
+        const {from_stream} = data.message;
+        if(from_stream === 'works') {
+          let {work, added, updated} = data.message;
+          work = JSON.parse(work);
+          if(added) {
+            this.$store.dispatch('works/addWork', work);
+          } else if(updated) {
+            console.log(work);
+            this.$store.dispatch('works/updateWork', work);
+          }
+          else {
+            this.$store.dispatch('works/removeWork', work);
+          }
+        } else {
+          const {work, user, subscribe} = data.message;
+          if (subscribe) {
+            this.onSubscribe(work, user);
+          } else {
+            this.onUnsubscribe(work, user);
+          }
         }
+
       },
       onSubscribe(work, user) {
         const title = `${user.pseudo} is participating to your work  ${work.name} !`;

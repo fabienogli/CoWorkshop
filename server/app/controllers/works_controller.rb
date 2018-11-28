@@ -11,6 +11,12 @@ class WorksController < ApplicationController
   # POST /works
   def create
     @work = Work.create!(work_params)
+    p @work.to_json(:include => @@includes)
+    ActionCable.server.broadcast "works", {
+        work: @work.to_json(:include => @@includes),
+        added: true,
+        from_stream: "works",
+    }
     json_response(@work, :created)
   end
 
@@ -33,6 +39,11 @@ class WorksController < ApplicationController
   def destroy
     if is_current_user(@work.user.id)
       @work.destroy
+      ActionCable.server.broadcast "works", {
+          work: @work,
+          added: false,
+          from_stream: "works",
+      }
       json_response(@work)
     else
       head :forbidden
@@ -49,6 +60,7 @@ class WorksController < ApplicationController
             work: @work,
             user: @participant,
             subscribe: true,
+            from_stream: "works_#{@work.user_id}",
         }
       end
       create_notification(true, @work, @participant)
@@ -67,6 +79,7 @@ class WorksController < ApplicationController
             work: @work,
             user: @user,
             subscribe: false,
+            from_stream: "works_#{@work.user_id}",
         }
       end
       create_notification(false, @work, @user)
@@ -81,8 +94,12 @@ class WorksController < ApplicationController
       @tags = Tag.find(params[:tag_id])
       @work.tags << @tags
 
+      ActionCable.server.broadcast "works", {
+          work: @work.to_json(:include => @@includes),
+          updated: true,
+          from_stream: "works"
+      }
       @tags.each do |tag|
-        p "broadcasting to tags_#{tag[:name]}"
         ActionCable.server.broadcast "tags_#{tag[:name]}", {
             work: @work,
             tag: tag,

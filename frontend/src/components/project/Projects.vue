@@ -17,23 +17,26 @@
     components: {ProjectList, ProjectForm},
     data() {
       return {
-        projects: [],
         showModal: false,
+      }
+    },
+    computed: {
+      projects() {
+        return this.$store.getters['works/all'];
       }
     },
     methods: {
       getWorks() {
         http.get("/works")
           .then(response => {
-            this.projects = response.data;
+            this.$store.dispatch('works/setWorks', response.data);
           });
       },
       addWork(work) {
-        work.user = this.$store.getters['auth/user'];
-        this.projects.push(work);
+        this.$store.dispatch('works/addWork', work);
       },
       deleteProject(project) {
-        this.projects.splice(this.projects.indexOf(project), 1);
+        this.$store.dispatch('works/removeWork', project);
       }
     },
     mounted() {

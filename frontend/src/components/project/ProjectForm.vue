@@ -84,10 +84,11 @@
           "name": this.name,
           "desc": this.desc,
           "user_id": this.userId
-        }).then(response => { //@TODO notify user
+        }).then(response => {
           let project = response.data;
           let tags = this.$refs.tagInput.getTags();
           project.tags = this.saveTags(project.id, tags);
+          project.users = [];
           this.$emit('newProject', project);
           this.close();
         });
