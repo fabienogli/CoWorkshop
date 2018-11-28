@@ -17,7 +17,13 @@
     computed: {
       token() {
         return this.$store.getters['auth/token'];
+      },
+      userId() {
+        return this.$store.getters['auth/user_id'];
       }
+    },
+    mounted() {
+      this.setUpWebsockets(this.token);
     },
     methods: {
       handleWorkWebsocket(data) {
@@ -44,12 +50,10 @@
           redirects_to
         };
         this.$store.dispatch('notification/addNotif', notif);
-      }
-    },
-    watch: {
-      token(newToken, oldToken) {
-        if (newToken !== '') {
-          const user_id = this.$store.getters['auth/user_id'];
+      },
+      setUpWebsockets(token) {
+        if (token !== '') {
+          const user_id = this.userId;
           this.$subscriber.subscribe('WorkChannel', this.handleWorkWebsocket, {
             user_id: user_id,
           });
@@ -67,6 +71,22 @@
                 tags: response.data.tags,
               });
             })
+        }
+      }
+    },
+    watch: {
+      token(newToken, oldToken) {
+        this.setUpWebsockets(newToken);
+      },
+      userId(newId, oldId) {
+        if(newId === 0) {
+          this.$subscriber.unsubscribe({
+            channel: 'TagChannel'
+          });
+          this.$subscriber.unsubscribe({
+            channel: 'WorkChannel',
+            user_id: oldId,
+          });
         }
       }
     }

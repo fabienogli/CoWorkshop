@@ -122,13 +122,12 @@ class Subscriber {
     }
   }
   
-  unsubscribe(channelToUnSub, id) {
-    const channel = this.channels[channelToUnSub];
-    if (channel) {
-      this.channels[channelToUnSub] = channel.filter(handler => {
-        return handler.id !== id;
-      });
-    }
+  unsubscribe(identifier) {
+    const msg = {
+      command: 'unsubscribe',
+      identifier: JSON.stringify(identifier)
+    };
+    this.socket.send(JSON.stringify(msg));
   }
 }
 
