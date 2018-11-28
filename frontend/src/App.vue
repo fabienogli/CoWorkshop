@@ -62,12 +62,12 @@
             .then((response) => {
               this.$subscriber.subscribe('TagChannel', (data) => {
                 const {from_stream} = data.message;
-                if(from_stream.equals('tags')) {
+                if(from_stream === 'tags') {
                   const {tag, added} = data.message;
                   if(added) {
-                    //Add new tag to store
+                    this.$store.dispatch('tags/addTag', tag);
                   } else {
-                    //Remove tag from store
+                    this.$store.dispatch('tags/removeTag', tag);
                   }
                 } else {
                   const {work, tag} = data.message;

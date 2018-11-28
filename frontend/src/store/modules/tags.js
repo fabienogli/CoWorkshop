@@ -13,11 +13,14 @@ const mutations = {
     state.tags = tags;
   },
   addTag(state, tag) {
-    state.tags.push(tag);
+    const found = state.tags.some((tago) => tago.id === tag.id);
+    if(!found) {
+      state.tags.push(tag);
+    }
   },
   removeTag(state, tag) {
-    state.notifs = state.notifs.filter(notification => {
-      return notification.id !== notif.id;
+    state.tags = state.tags.filter(tago => {
+      return tago.id !== tag.id;
     })
   },
   updateTag(state, tag) {
