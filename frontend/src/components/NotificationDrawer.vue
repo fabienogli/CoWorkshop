@@ -75,8 +75,7 @@
     }
     .notification-item {
       font-size: 18px;
-      padding-left: 10px;
-      padding-top: 10px;
+      padding: 5px;
       border-bottom: 1px solid $lightGrey;
       border-left: 1px solid $lightGrey;
       border-right: 1px solid $lightGrey;
@@ -110,13 +109,13 @@
         border: 1px solid $lightGrey;
 
         &.unread {
-          background-color: #636363;
+          background-color: #636363 !important;
         }
       }
 
     }
     .unread {
-      background: #787878 !important;
+      background: #919191 !important;
     }
   }
 </style>
