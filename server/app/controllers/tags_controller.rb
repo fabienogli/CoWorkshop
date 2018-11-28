@@ -1,5 +1,5 @@
 class TagsController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_user, only: [:create, :update, :destroy]
   before_action :set_tag, only: [:show, :update, :destroy]
   # GET /tags
   def index

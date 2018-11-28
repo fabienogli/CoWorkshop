@@ -6,10 +6,10 @@
         <button class="button update" id="show-modal" @click="showModal = true" >Create a Tag</button>
       </div>
     </div>
-      <TagForm v-if="showModal" @close="showModal = false" @newTag="addTag"/>
+      <TagForm v-if="showModal" @close="showModal = false"/>
     <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
     <br/>
-    <subscribed-tags ref="subscription"/>
+    <subscribed-tags :subscriptions="subscriptions"/>
   </div>
 </template>
 
@@ -33,36 +33,45 @@
     },
     computed: {
       tags() {
-        return this.$store.getters['tags/all'];
+        return this.$store.getters['availableTags/all'];
+      },
+      subscriptions() {
+        let test = this.$store.getters['subscriptions/all'];
+        return test;
       }
     },
     methods: {
       getTags() {
         http.get("/tags")
           .then(response => {
-            this.$store.dispatch('tags/setTags', response.data);
+            this.$store.dispatch('availableTags/set', response.data);
           });
-      },
-      addTag(tag) {
-          this.$store.dispatch('tags/addTag', tag);
       },
       subs(tag) {
         let addr = "/users/" + this.userId + "/tags";
         http.post(addr, {
           "tag_id": tag.id
         }).then(response => {
-          console.log(response);
-          this.$refs.subscription.addTag(tag);
+          this.$store.dispatch('subscriptions/add', tag);
+          this.$store.dispatch('availableTags/remove', tag);
           this.$subscriber.perform('TagChannel', 'another_sub', {
             tag: tag.name,
           })
         });
+      },
+      fetchSubscriptions() {
+        let addr = "/users/" + this.userId;
+        http.get(addr)
+          .then(response => {
+            this.$store.dispatch('subscriptions/set', response.data.tags);
+          });
       },
     },
     mounted() {
       let user = this.$cookies.get("currentUser");
       this.userId = user.id;
       this.getTags();
+      this.fetchSubscriptions();
     },
   }
 </script>
