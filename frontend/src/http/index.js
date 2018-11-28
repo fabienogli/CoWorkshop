@@ -33,8 +33,6 @@ class Http {
       router.push('/login');
       return Promise.resolve();
     }
-    
-    console.error(error);
     return Promise.reject(error);
   }
   

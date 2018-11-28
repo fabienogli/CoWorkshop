@@ -2,35 +2,65 @@
   <div class="register">
     <form @submit.prevent="register" class="form">
 
-      <input type="text"
-             placeholder="Pseudo"
-             class="input pseudo"
-             id="pseudo"
-             v-model.trim="pseudo">
+      <div class="form-group" :class="{'has-error': errors.has('pseudo') || customErrors.pseudo }">
+        <input type="text"
+               placeholder="Pseudo"
+               class="input pseudo"
+               id="pseudo"
+               v-validate="'required'"
+               name="pseudo"
+               v-model.trim="pseudo">
+        <span class="error">{{errors.first('pseudo')}}</span>
+        <span v-if="customErrors.pseudo" class="error">{{customErrors.pseudo}}</span>
+      </div>
 
-      <input type="text"
-             placeholder="Email"
-             class="input email"
-             id="email"
-             v-model.trim="email">
+      <div class="form-group" :class="{'has-error': errors.has('email') || customErrors.email }">
+        <input type="text"
+               v-validate="'required|email'"
+               placeholder="Email"
+               class="input email"
+               id="email"
+               name="email"
+               v-model.trim="email">
+        <span class="error">{{errors.first('email')}}</span>
+        <span v-if="customErrors.email" class="error">{{customErrors.email}}</span>
+      </div>
 
-      <input type="text"
-             placeholder="Website"
-             class="input website"
-             id="website"
-             v-model.trim="website">
+      <div class="form-group" :class="{'has-error': errors.has('website')}">
+        <input type="text"
+               placeholder="Website"
+               class="input website"
+               id="website"
+               v-validate="{regex: /^((?:http(?:s)?\:\/\/)?[a-zA-Z0-9_-]+(?:.[a-zA-Z0-9_-]+)*.[a-zA-Z]{2,4}(?:\/[a-zA-Z0-9_]+)*(?:\/[a-zA-Z0-9_]+.[a-zA-Z]{2,4}(?:\?[a-zA-Z0-9_]+\=[a-zA-Z0-9_]+)?)?(?:\&[a-zA-Z0-9_]+\=[a-zA-Z0-9_]+)*)$/ }"
+               name="website"
+               v-model.trim="website">
+        <span class="error">{{errors.first('website')}}</span>
+      </div>
 
-      <input type="password"
-             placeholder="Password"
-             class="input password"
-             id="password"
-             v-model.trim="password">
 
-      <input type="password"
-             placeholder="Confirm password"
-             class="input password"
-             id="password_confirm"
-             v-model.trim="password_confirm">
+      <div class="form-group" :class="{'has-error': errors.has('password')}">
+        <input type="password"
+               v-validate="'required'"
+               placeholder="Password"
+               class="input password"
+               id="password"
+               name="password"
+               ref="password"
+               v-model.trim="password">
+        <span class="error">{{errors.first('password')}}</span>
+      </div>
+
+      <div class="form-group" :class="{'has-error': errors.has('password_confirm')}">
+        <input type="password"
+               v-validate="'required|confirmed:password'"
+               placeholder="Confirm password"
+               class="input password"
+               id="password_confirm"
+               name="password_confirm"
+               data-vv-as="password"
+               v-model.trim="password_confirm">
+        <span class="error">{{errors.first('password_confirm')}}</span>
+      </div>
 
       <div class="message">
         Already have an account ?
@@ -59,6 +89,7 @@
         website: '',
         password: '',
         password_confirm: '',
+        customErrors: {},
       }
     },
     methods: {
@@ -66,8 +97,8 @@
         return this.email !== ''
           && this.pseudo !== ''
           && this.password !== ''
-          && this.password_confirm !== ''
-          && this.password === this.password_confirm;
+          && this.password_confirm === this.password
+          && !this.errors.any();
       },
       register() {
         if (this.isValidForm()) {
@@ -81,10 +112,32 @@
           }).then((response) => {
             const user = response.data;
             loginAndRedirectTo(user.email, this.password);
-          });
-        } else {
-          console.error('not valid');
+          }).catch((error) => {
+            if (error.response) {
+              const errors = error.response.data.message.split(':')[1].split(',');
+              errors.forEach(error => {
+                const errorTemplate = 'has already been taken';
+                const emailError = `Email ${errorTemplate}`;
+                const pseudoError = `Pseudo ${errorTemplate}`;
+
+                if (error.includes(emailError)) {
+                  this.$set(this.customErrors, 'email', emailError);
+                }
+                if (error.includes(pseudoError)) {
+                  this.$set(this.customErrors, 'pseudo', pseudoError);
+                }
+              })
+            }
+          })
         }
+      }
+    },
+    watch: {
+      email() {
+        this.$delete(this.customErrors, 'email');
+      },
+      pseudo() {
+        this.$delete(this.customErrors, 'pseudo');
       }
     }
   }
@@ -104,6 +157,26 @@
       flex-direction: column;
       max-width: 30%;
       margin: auto;
+
+      .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .error {
+          flex: 1;
+          color: crimson;
+          padding-left: 3px;
+          padding-bottom: 5px;
+        }
+
+        &.has-error {
+          .input {
+            &:focus {
+              box-shadow: 0 0 1px 1px crimson;
+            }
+          }
+        }
+      }
 
       .input {
         flex: 1;
