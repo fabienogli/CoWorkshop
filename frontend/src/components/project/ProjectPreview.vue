@@ -1,11 +1,12 @@
 <template>
   <div id="projectPreview" class="project-preview">
     <div  class="project container" @click="showModal = true">
-      <h2>{{project.name}}</h2>
-      <div class="modal-body">
-        <b>Créateur: </b> {{project.user_id}}
-        <br/>
-        <b>Description:</b> {{project.desc}}
+      <div class="title"><h1 class="no-margin">{{project.name}}</h1></div>
+        <div class="information creator">
+          <div class="information label">Creator:</div> {{project.user.pseudo}}
+        <div class="information creator">
+          <div class="information label">Description:</div> {{project.desc}}
+        </div>
       </div>
     </div>
     <Project v-if="showModal" @close="showModal = false" @deleteProject="deleteProject" :project="project"/>
@@ -52,5 +53,4 @@
     border-radius: 23px;
     border: 2px solid $accentColor;
   }
-
 </style>
