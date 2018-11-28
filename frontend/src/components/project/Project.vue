@@ -37,17 +37,18 @@
         </div>
       </div>
       <div slot="footer">
-        <div v-if="isCreator" class="test">
-          <button  @click="deleteProject" class="button delete">
-            Delete
-          </button>
-          <button  @click="update" class="button update">
-            Update
-          </button>
-        </div>
         <button v-if="!participate" @click="joinWork" class="button create">
           Join the Project
         </button>
+        <div v-if="isCreator" class="button-container">
+          <button  @click="update" class="button update">
+            Update
+          </button>
+          <button  @click="deleteProject" class="button delete">
+            Delete
+          </button>
+        </div>
+
       </div>
     </modal>
     <ProjectForm v-if="showModal" @close="showModal = false" :header="project.name" :project="project"/>
@@ -150,5 +151,8 @@
   }
   .information {
     flex: 0 0 100%;
+  }
+  .button-container {
+    display: inline;
   }
 </style>
