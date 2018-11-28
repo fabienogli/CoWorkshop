@@ -104,7 +104,7 @@
   .modal-footer {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: center;
     width: 100%;
   }
 

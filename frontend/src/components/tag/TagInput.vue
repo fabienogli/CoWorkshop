@@ -1,5 +1,5 @@
 <template>
-  <div id="tagInput" class="tesr">
+  <div id="tagInput">
     <div class="tags">
       <div class="subtitle">Tags</div>
       <div class="input input-container" @mousedown.prevent="setFocus">
