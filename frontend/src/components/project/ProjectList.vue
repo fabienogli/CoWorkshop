@@ -1,7 +1,7 @@
 <template>
   <div class="projectList">
     <div v-for="project in projects">
-      <ProjectPreview :project="project" />
+      <ProjectPreview :project="project" @deleteProject="deleteProject"/>
     </div>
   </div>
 </template>
@@ -11,6 +11,11 @@
     name: "ProjectList",
     props: ['projects'],
     components: {ProjectPreview},
+    methods: {
+      deleteProject(project) {
+        this.$emit('deleteProject', project);
+      }
+    }
   }
 </script>
 

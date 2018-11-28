@@ -8,7 +8,7 @@
         <b>Description:</b> {{project.desc}}
       </div>
     </div>
-    <Project v-if="showModal" @close="showModal = false" :project="project"/>
+    <Project v-if="showModal" @close="showModal = false" @deleteProject="deleteProject" :project="project"/>
   </div>
 </template>
 
@@ -25,6 +25,11 @@
         showModal: false,
       }
     },
+    methods: {
+      deleteProject(project) {
+        this.$emit('deleteProject', project)
+      }
+    }
   }
 
 </script>
