@@ -38,9 +38,7 @@
   @import "~@/styles/_variable";
 
   .project-preview {
-    /*background-color: #abaf65;*/
-    flex: 0 1 24%;
-    padding-bottom: 4px;
+
   }
   .project:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);

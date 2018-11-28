@@ -175,8 +175,4 @@
     align-items: center;
   }
 
-  .modal-container {
-    align-items: center;
-    width: 460px;
-  }
 </style>

@@ -10,7 +10,7 @@
           <br/>
           <b>Description:</b> {{project.desc}}
         </p>
-        <div class="participants">
+        <div v-if="users.length > 0" class="participants">
           Participants:
           <div class="participant" v-for="user in project.users">
             <p>
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div slot="footer">
-        <div v-if="isCreator">
+        <div v-if="isCreator" class="test">
           <button  @click="deleteProject" class="button delete">
             Delete
           </button>
@@ -118,7 +118,10 @@
   @import "~@/styles/_variable";
 
   .button {
-    float: right;
+    flex: 1;
+  }
+  .test {
+    display: inline;
   }
 
   .tag {
