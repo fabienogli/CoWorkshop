@@ -2,7 +2,7 @@
   <div class="register">
     <form @submit.prevent="register" class="form">
 
-      <div class="form-group" :class="{'has-error': errors.has('pseudo') }">
+      <div class="form-group" :class="{'has-error': errors.has('pseudo') || customErrors.pseudo }">
         <input type="text"
                placeholder="Pseudo"
                class="input pseudo"
@@ -11,10 +11,10 @@
                name="pseudo"
                v-model.trim="pseudo">
         <span class="error">{{errors.first('pseudo')}}</span>
+        <span v-if="customErrors.pseudo" class="error">{{customErrors.pseudo}}</span>
       </div>
 
-
-      <div class="form-group" :class="{'has-error': errors.has('email') }">
+      <div class="form-group" :class="{'has-error': errors.has('email') || customErrors.email }">
         <input type="text"
                v-validate="'required|email'"
                placeholder="Email"
@@ -23,6 +23,7 @@
                name="email"
                v-model.trim="email">
         <span class="error">{{errors.first('email')}}</span>
+        <span v-if="customErrors.email" class="error">{{customErrors.email}}</span>
       </div>
 
       <div class="form-group" :class="{'has-error': errors.has('website')}">
@@ -44,6 +45,7 @@
                class="input password"
                id="password"
                name="password"
+               ref="password"
                v-model.trim="password">
         <span class="error">{{errors.first('password')}}</span>
       </div>
@@ -87,16 +89,16 @@
         website: '',
         password: '',
         password_confirm: '',
+        customErrors: {},
       }
     },
     methods: {
       isValidForm() {
         return this.email !== ''
-        && this.pseudo !== ''
-        && this.website !== ''
-        && this.password !== ''
-        && this.password_confirm === this.password
-        && !this.errors.any();
+          && this.pseudo !== ''
+          && this.password !== ''
+          && this.password_confirm === this.password
+          && !this.errors.any();
       },
       register() {
         if (this.isValidForm()) {
@@ -110,8 +112,32 @@
           }).then((response) => {
             const user = response.data;
             loginAndRedirectTo(user.email, this.password);
-          });
-        } 
+          }).catch((error) => {
+            if (error.response) {
+              const errors = error.response.data.message.split(':')[1].split(',');
+              errors.forEach(error => {
+                const errorTemplate = 'has already been taken';
+                const emailError = `Email ${errorTemplate}`;
+                const pseudoError = `Pseudo ${errorTemplate}`;
+
+                if (error.includes(emailError)) {
+                  this.$set(this.customErrors, 'email', emailError);
+                }
+                if (error.includes(pseudoError)) {
+                  this.$set(this.customErrors, 'pseudo', pseudoError);
+                }
+              })
+            }
+          })
+        }
+      }
+    },
+    watch: {
+      email() {
+        this.$delete(this.customErrors, 'email');
+      },
+      pseudo() {
+        this.$delete(this.customErrors, 'pseudo');
       }
     }
   }
@@ -131,7 +157,6 @@
       flex-direction: column;
       max-width: 30%;
       margin: auto;
-
 
       .form-group {
         flex: 1;
