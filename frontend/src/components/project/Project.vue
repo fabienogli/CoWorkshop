@@ -1,27 +1,38 @@
 <template>
   <div id="project">
     <modal @close="close">
-      <h1 class="title" slot="header">
-        {{project.name}}
-      </h1>
+      <div class="title" slot="header">
+        <h1 class="no-margin">
+          {{project.name}}
+        </h1>
+      </div>
       <div slot="body">
-        <p>
-          <b>Créateur:</b> {{project.user_id}}
-          <br/>
-          <b>Description:</b> {{project.desc}}
-        </p>
-        <div v-if="users.length > 0" class="participants">
-          Participants:
-          <div class="participant" v-for="user in project.users">
-            <p>
-              {{user.pseudo}}
-            </p>
+        <div class="information creator">
+          <div class="information label">Creator</div> {{project.user.pseudo}}
+        </div>
+        <div class="information creator">
+          <div class="information label">Description</div> {{project.desc}}
+        </div>
+        <div v-if="project.users.length > 0" class="participants-container information">
+          <div class="information label">Participants</div>
+          <div class="participants">
+            <div class="item-container" v-for="user in project.users">
+              <div class="participant">
+                {{user.pseudo}}
+              </div>
+            </div>
           </div>
         </div>
-        <div v-if="project.tags.length > 0" class="tag-container">
-          <div class="subtitle">Tags:</div>
-          <div class="tag" v-for="tag in project.tags">
-            {{tag.name}}
+        <div v-if="project.tags.length > 0" class="tags-container">
+          <div class="information">
+            <div class="label">
+              Tags
+            </div>
+          </div>
+          <div class="item-container" v-for="tag in project.tags">
+            <div class="tag">
+              {{tag.name}}
+            </div>
           </div>
         </div>
       </div>
@@ -99,7 +110,6 @@
         let addr = "/works/" + this.project.id;
         http.delete(addr, {})
           .then(response => { //@TODO
-            console.log(response);
             this.$emit("deleteProject", project);
           });
       },
@@ -120,9 +130,6 @@
   .button {
     flex: 1;
   }
-  .test {
-    display: inline;
-  }
 
   .tag {
     border: 1px solid $accentColor;
@@ -130,14 +137,18 @@
     border-radius: 4px;
     padding: 10px 10px;
   }
-  .tag-container {
+  .tags-container {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    text-align: center;
   }
-  .subtitle {
+
+  .participants {
+    display: flex;
+    flex-direction: row;
+  }
+  .information {
     flex: 0 0 100%;
-    font-weight: bold;
-    padding: 1px ;
   }
 </style>

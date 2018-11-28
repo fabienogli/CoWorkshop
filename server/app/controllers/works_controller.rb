@@ -1,7 +1,7 @@
 class WorksController < ApplicationController
   before_action :authenticate_user
   before_action :set_work, only: [:show, :update, :destroy, :bind_participants, :unbound_participants, :bind_tags, :unbound_tags]
-  @@includes = [:users, :tags]
+  @@includes = [:users, :tags, :user]
   # GET /works
   def index
     @works = Work.all
@@ -122,13 +122,15 @@ class WorksController < ApplicationController
     notifs = Array.new
     title = "A new project (#{work.name}) was created with the tag #{tag.name} that you follow !"
     tag.users.each do | user |
-      notif = {
-          title: title,
-          redirects_to: '/works',
-          read: false,
-          user_id: user.id
-      }
-      notifs << notif
+      if user.id != work.user_id
+        notif = {
+            title: title,
+            redirects_to: '/works',
+            read: false,
+            user_id: user.id
+        }
+        notifs << notif
+      end
     end
     Notification.create(notifs);
   end

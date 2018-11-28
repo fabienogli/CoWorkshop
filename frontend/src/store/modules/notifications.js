@@ -29,6 +29,12 @@ const mutations = {
     const index = state.notifs.findIndex((noti) => noti.id === notif.id);
     state.notifs.splice(index, 1, notification);
   },
+  setUnread(state, notif) {
+    const notification = JSON.parse(JSON.stringify(notif));
+    notification.read = false;
+    const index = state.notifs.findIndex((noti) => noti.id === notif.id);
+    state.notifs.splice(index, 1, notification);
+  },
   setNotifs(state, notifs) {
     state.notifs = notifs;
   },
@@ -51,6 +57,13 @@ const actions = {
     }).then(() => {
       commit('setRead', notif);
     });
+  },
+  setUnread({commit}, notif) {
+    http.put(`/notifications/${notif.id}`, {
+      read: false,
+    }).then(() => {
+      commit('setUnread', notif)
+    })
   },
   setNotifs({commit}, notifs) {
     commit('setNotifs', notifs);

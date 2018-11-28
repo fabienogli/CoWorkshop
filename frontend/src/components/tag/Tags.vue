@@ -3,10 +3,8 @@
     <div class="create-tag-container">
       <p>Not enough Tags, create your own !</p>
       <div class="button-container">
-
         <button class="button update" id="show-modal" @click="showModal = true" >Create a Tag</button>
       </div>
-
     </div>
       <TagForm v-if="showModal" @close="showModal = false" @newTag="addTag"/>
     <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
@@ -51,6 +49,9 @@
         }).then(response => {
           console.log(response);
           this.$refs.subscription.addTag(tag);
+          this.$subscriber.perform('TagChannel', 'another_sub', {
+            tag: tag.name,
+          })
         });
       },
     },

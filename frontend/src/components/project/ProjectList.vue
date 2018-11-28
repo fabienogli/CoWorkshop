@@ -1,6 +1,6 @@
 <template>
   <div class="projectList">
-    <div v-for="project in projects" class="project-preview-container">
+    <div v-for="project in projects" class="item-container">
       <div >
         <ProjectPreview :project="project" @deleteProject="deleteProject"/>
       </div>
@@ -25,10 +25,10 @@
   .projectList {
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
-  .project-preview-container {
+  .item-container {
     padding: 2px 4px;
-    flex: 1;
     max-width: 162px;
   }
 </style>

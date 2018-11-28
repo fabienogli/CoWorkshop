@@ -10,6 +10,8 @@ class Subscriber {
     this.channels = {};
     this.socket = Subscriber.connect(this.url, this.config);
     this.setUpListeners();
+    
+    this.pendingSubscriptions = {}
   }
   
   static connect(url, config) {
@@ -48,6 +50,9 @@ class Subscriber {
       }
       
       if (message.type === 'confirm_subscription') {
+        if (message.identifier) {
+          this.pendingSubscriptions[message.identifier](message);
+        }
         return;
       }
       
@@ -74,8 +79,13 @@ class Subscriber {
         }),
       };
       this.socket.send(JSON.stringify(msg));
-      
       this.channels[channel] = {fn};
+      
+      new Promise((resolve) => {
+        this.pendingSubscriptions[msg.identifier] = resolve
+      }).then((data) => {
+        delete this.pendingSubscriptions[data.identifier];
+      })
     }
     else {
       clearTimeout(retryId);
@@ -85,13 +95,39 @@ class Subscriber {
     }
   }
   
-  unsubscribe(channelToUnSub, id) {
-    const channel = this.channels[channelToUnSub];
-    if (channel) {
-      this.channels[channelToUnSub] = channel.filter(handler => {
-        return handler.id !== id;
+  perform(channel, action, payload, retryId) {
+    if (this.isOpenSocket()) {
+      const identifier = JSON.stringify({
+        channel: channel,
       });
+      if(!this.pendingSubscriptions[identifier]) {
+        const msg = {
+          command: 'message',
+          identifier: JSON.stringify({
+            channel: channel,
+          }),
+          data: JSON.stringify({
+            action: action,
+            ...payload,
+          }),
+        };
+        this.socket.send(JSON.stringify(msg));
+      } else {
+        clearTimeout(retryId);
+        let retryId = setTimeout(() => {
+          this.perform(channel, action, payload, retryId)
+        }, 1000);
+      }
+      
     }
+  }
+  
+  unsubscribe(identifier) {
+    const msg = {
+      command: 'unsubscribe',
+      identifier: JSON.stringify(identifier)
+    };
+    this.socket.send(JSON.stringify(msg));
   }
 }
 
