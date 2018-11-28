@@ -9,7 +9,7 @@
         <div class="input-container">
           <input class="input" placeholder="Description" id="desc" v-model="desc" type="text" name="desc">
         </div>
-        <TagInput :tags="project.tags" ref="tagInput"/>
+        <TagInput :tags="tags" ref="tagInput"/>
       </div>
       <button v-if="project.userId==0" slot="footer" class="modal-default-button button create" @click="create">
         Create
@@ -54,7 +54,7 @@
         name: this.project.name,
         desc: this.project.desc,
         userId: this.project.user_id,
-        tags: this.project.tags,
+       // tags: this.project.tags,
       }
     },
     watch: {
@@ -65,6 +65,11 @@
         }
         this.top = newValue;
       },
+    },
+    computed: {
+      tags() {
+        return JSON.parse(JSON.stringify(this.project.tags));
+      }
     },
     methods: {
       checkForm() {
@@ -84,10 +89,11 @@
           "name": this.name,
           "desc": this.desc,
           "user_id": this.userId
-        }).then(response => { //@TODO notify user
+        }).then(response => {
           let project = response.data;
           let tags = this.$refs.tagInput.getTags();
           project.tags = this.saveTags(project.id, tags);
+          project.users = [];
           this.$emit('newProject', project);
           this.close();
         });
@@ -98,38 +104,33 @@
           "name": this.name,
           "desc": this.desc,
         }).then(response => { //@TODO notify user
-          let project = response.data;
-          let diff = this.diffBetween(project.tags, this.$refs.tagInput.getTags());
-          project.tags = this.saveTags(project.id, diff.new);
-          diff.old.forEach(tag => {
-              let addr = "/works/" + project.id + "/tags/" + tag.id;
-              http.delete(addr, {}).then(e => { //@TODO notify user
-                console.log(e)});
+          const project = response.data;
+          const oldTags = project.tags;
+          const oldTagsId = oldTags.map(tag => tag.id);
+          const newTags = this.$refs.tagInput.getTags();
+          const newTagsId = newTags.map(tag => tag.id);
+
+          const toRemove = this.diff(oldTagsId, newTagsId);
+          const toAdd = this.diff(newTagsId, oldTagsId);
+
+          toRemove.forEach(tagId => {
+            http.delete(`/works/${project.id}/tags/${tagId}`)
+              .then(() => { /* Yeah */ });
           });
-          this.$emit('updateProject', project);
+
+          http.post(`/works/${project.id}/tags/`, {
+            tag_id: toAdd,
+          }).then(() => { /* Yeah */});
+
+          project.tags = newTags;
+          this.$store.dispatch('works/updateWork', project);
           this.close();
-        });
+        }).catch((error) => {
+          console.log(error);
+        })
       },
-      diffBetween(_before, after) {
-        let newItems = after.filter(it => _before.indexOf(it) === -1);
-        let oldItems = _before.filter(it => after.indexOf(it) === -1);
-        return {
-          new: newItems,
-          old: oldItems,
-        }
-      },
-      saveTags(projectId, tags) {
-        if (tags.length < 1) {
-          return [];
-        }
-        let tagsId = tags.map(tag => {
-          return tag.id;
-        });
-        let addr = "/works/" + projectId + "/tags";
-        http.post(addr, {
-          "tag_id": tagsId,
-        });
-        return tags
+      diff(first, second) {
+        return first.filter(it => second.indexOf(it) === -1);
       },
     },
     mounted() {

@@ -29,18 +29,22 @@
     data() {
       return {
         showModal: false,
-        tags: [],
+      }
+    },
+    computed: {
+      tags() {
+        return this.$store.getters['tags/all'];
       }
     },
     methods: {
       getTags() {
         http.get("/tags")
           .then(response => {
-            this.tags = response.data;
+            this.$store.dispatch('tags/setTags', response.data);
           });
       },
       addTag(tag) {
-          this.tags.push(tag);
+          this.$store.dispatch('tags/addTag', tag);
       },
       subs(tag) {
         let addr = "/users/" + this.userId + "/tags";

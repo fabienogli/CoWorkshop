@@ -27,12 +27,28 @@
     },
     methods: {
       handleWorkWebsocket(data) {
-        const {work, user, subscribe} = data.message;
-        if (subscribe === true) {
-          this.onSubscribe(work, user);
-        } else if (subscribe === false) {
-          this.onUnsubscribe(work, user);
+        const {from_stream} = data.message;
+        if(from_stream === 'works') {
+          let {work, added, updated} = data.message;
+          work = JSON.parse(work);
+          if(added) {
+            this.$store.dispatch('works/addWork', work);
+          } else if(updated) {
+            if(work.user_id !== this.userId){
+              this.$store.dispatch('works/updateWork', work);
+            }
+          } else {
+            this.$store.dispatch('works/removeWork', work);
+          }
+        } else {
+          const {work, user, subscribe} = data.message;
+          if (subscribe) {
+            this.onSubscribe(work, user);
+          } else {
+            this.onUnsubscribe(work, user);
+          }
         }
+
       },
       onSubscribe(work, user) {
         const title = `${user.pseudo} is participating to your work  ${work.name} !`;
@@ -61,10 +77,20 @@
           http.get(`/users/${user_id}`)
             .then((response) => {
               this.$subscriber.subscribe('TagChannel', (data) => {
-                const {tag, work} = data.message;
-                if(work.user_id !== user_id) {
-                  const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`;
-                  this.createAndDispatchNotification(title, '/works');
+                const {from_stream} = data.message;
+                if(from_stream === 'tags') {
+                  const {tag, added} = data.message;
+                  if(added) {
+                    this.$store.dispatch('tags/addTag', tag);
+                  } else {
+                    this.$store.dispatch('tags/removeTag', tag);
+                  }
+                } else {
+                  const {work, tag} = data.message;
+                  if(work.user_id !== user_id) {
+                    const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`;
+                    this.createAndDispatchNotification(title, '/works');
+                  }
                 }
               });
               this.$subscriber.perform('TagChannel', 'subscribe_all', {
