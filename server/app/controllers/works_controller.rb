@@ -118,6 +118,11 @@ class WorksController < ApplicationController
     if is_current_user(@work.user.id)
       @tag = @work.tags.find(params[:tag_id])
       @work.tags.destroy(@tag)
+      ActionCable.server.broadcast "works", {
+          work: @work.to_json(:include => @@includes),
+          updated: true,
+          from_stream: "works"
+      }
       json_response(@user, :ok, @@includes)
     else
       head :forbidden
