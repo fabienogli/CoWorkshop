@@ -44,8 +44,11 @@
       }
     },
     methods: {
+      isValidForm() {
+        return this.email !== '' && this.password !== '';
+      },
       login() {
-        if (this.email !== '' && this.password !== '') {
+        if (this.isValidForm()) {
           loginAndRedirectTo(this.email, this.password)
             .catch((error) => {
               if (error.response) {

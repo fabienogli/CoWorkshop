@@ -2,35 +2,63 @@
   <div class="register">
     <form @submit.prevent="register" class="form">
 
-      <input type="text"
-             placeholder="Pseudo"
-             class="input pseudo"
-             id="pseudo"
-             v-model.trim="pseudo">
+      <div class="form-group" :class="{'has-error': errors.has('pseudo') }">
+        <input type="text"
+               placeholder="Pseudo"
+               class="input pseudo"
+               id="pseudo"
+               v-validate="'required'"
+               name="pseudo"
+               v-model.trim="pseudo">
+        <span class="error">{{errors.first('pseudo')}}</span>
+      </div>
 
-      <input type="text"
-             placeholder="Email"
-             class="input email"
-             id="email"
-             v-model.trim="email">
 
-      <input type="text"
-             placeholder="Website"
-             class="input website"
-             id="website"
-             v-model.trim="website">
+      <div class="form-group" :class="{'has-error': errors.has('email') }">
+        <input type="text"
+               v-validate="'required|email'"
+               placeholder="Email"
+               class="input email"
+               id="email"
+               name="email"
+               v-model.trim="email">
+        <span class="error">{{errors.first('email')}}</span>
+      </div>
 
-      <input type="password"
-             placeholder="Password"
-             class="input password"
-             id="password"
-             v-model.trim="password">
+      <div class="form-group" :class="{'has-error': errors.has('website')}">
+        <input type="text"
+               placeholder="Website"
+               class="input website"
+               id="website"
+               v-validate="{regex: /^((?:http(?:s)?\:\/\/)?[a-zA-Z0-9_-]+(?:.[a-zA-Z0-9_-]+)*.[a-zA-Z]{2,4}(?:\/[a-zA-Z0-9_]+)*(?:\/[a-zA-Z0-9_]+.[a-zA-Z]{2,4}(?:\?[a-zA-Z0-9_]+\=[a-zA-Z0-9_]+)?)?(?:\&[a-zA-Z0-9_]+\=[a-zA-Z0-9_]+)*)$/ }"
+               name="website"
+               v-model.trim="website">
+        <span class="error">{{errors.first('website')}}</span>
+      </div>
 
-      <input type="password"
-             placeholder="Confirm password"
-             class="input password"
-             id="password_confirm"
-             v-model.trim="password_confirm">
+
+      <div class="form-group" :class="{'has-error': errors.has('password')}">
+        <input type="password"
+               v-validate="'required'"
+               placeholder="Password"
+               class="input password"
+               id="password"
+               name="password"
+               v-model.trim="password">
+        <span class="error">{{errors.first('password')}}</span>
+      </div>
+
+      <div class="form-group" :class="{'has-error': errors.has('password_confirm')}">
+        <input type="password"
+               v-validate="'required|confirmed:password'"
+               placeholder="Confirm password"
+               class="input password"
+               id="password_confirm"
+               name="password_confirm"
+               data-vv-as="password"
+               v-model.trim="password_confirm">
+        <span class="error">{{errors.first('password_confirm')}}</span>
+      </div>
 
       <div class="message">
         Already have an account ?
@@ -64,10 +92,11 @@
     methods: {
       isValidForm() {
         return this.email !== ''
-          && this.pseudo !== ''
-          && this.password !== ''
-          && this.password_confirm !== ''
-          && this.password === this.password_confirm;
+        && this.pseudo !== ''
+        && this.website !== ''
+        && this.password !== ''
+        && this.password_confirm === this.password
+        && !this.errors.any();
       },
       register() {
         if (this.isValidForm()) {
@@ -82,9 +111,7 @@
             const user = response.data;
             loginAndRedirectTo(user.email, this.password);
           });
-        } else {
-          console.error('not valid');
-        }
+        } 
       }
     }
   }
@@ -104,6 +131,27 @@
       flex-direction: column;
       max-width: 30%;
       margin: auto;
+
+
+      .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .error {
+          flex: 1;
+          color: crimson;
+          padding-left: 3px;
+          padding-bottom: 5px;
+        }
+
+        &.has-error {
+          .input {
+            &:focus {
+              box-shadow: 0 0 1px 1px crimson;
+            }
+          }
+        }
+      }
 
       .input {
         flex: 1;
