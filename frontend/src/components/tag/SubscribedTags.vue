@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import TagList from '@/components/TagList';
+  import TagList from '@/components/tag/TagList';
   import http from '@/http';
 
   export default {

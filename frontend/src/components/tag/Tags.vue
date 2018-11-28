@@ -9,10 +9,10 @@
 </template>
 
 <script>
-  import TagList from '@/components/TagList';
-  import TagForm from '@/components/TagForm';
+  import TagList from '@/components/tag/TagList';
+  import TagForm from '@/components/tag/TagForm';
   import http from '@/http';
-  import SubscribedTags from '@/components/SubscribedTags';
+  import SubscribedTags from '@/components/tag/SubscribedTags';
 
   export default {
     name: "Tags",

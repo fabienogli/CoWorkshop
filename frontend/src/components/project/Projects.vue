@@ -9,8 +9,8 @@
 </template>
 
 <script>
-  import ProjectList from '@/components/ProjectList';
-  import ProjectForm from '@/components/ProjectForm';
+  import ProjectList from '@/components/project/ProjectList';
+  import ProjectForm from '@/components/project/ProjectForm';
   import http from '@/http';
   export default {
     name: "Projects",

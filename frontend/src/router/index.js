@@ -7,8 +7,8 @@ import http from '@/http'
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
 import NotFound from '@/components/NotFound'
-import Projects from '@/components/Projects'
-import Tags from '@/components/Tags'
+import Projects from '@/components/project/Projects'
+import Tags from '@/components/tag/Tags'
 import NotificationDrawer from '@/components/NotificationDrawer'
 import {getAllNotifications} from "@/util";
 

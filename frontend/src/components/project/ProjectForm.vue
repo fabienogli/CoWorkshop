@@ -26,7 +26,7 @@
 <script>
   import http from '@/http';
   import Modal from '@/components/Modal';
-  import TagInput from '@/components/TagInput';
+  import TagInput from '@/components/tag/TagInput';
 
   export default {
     name: 'ProjectForm',

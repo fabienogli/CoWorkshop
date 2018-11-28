@@ -40,7 +40,7 @@
 
 <script>
   import Modal from '@/components/Modal';
-  import ProjectForm from '@/components/ProjectForm';
+  import ProjectForm from '@/components/project/ProjectForm';
   import http from '@/http';
 
   export default {
