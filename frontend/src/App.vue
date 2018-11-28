@@ -34,10 +34,8 @@
           if(added) {
             this.$store.dispatch('works/addWork', work);
           } else if(updated) {
-            console.log(work);
             this.$store.dispatch('works/updateWork', work);
-          }
-          else {
+          } else {
             this.$store.dispatch('works/removeWork', work);
           }
         } else {

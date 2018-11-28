@@ -8,10 +8,12 @@
       </div>
       <div slot="body">
         <div class="information creator">
-          <div class="information label">Creator</div> {{project.user.pseudo}}
+          <div class="information label">Creator</div>
+          {{project.user.pseudo}}
         </div>
         <div class="information creator">
-          <div class="information label">Description</div> {{project.desc}}
+          <div class="information label">Description</div>
+          {{project.desc}}
         </div>
         <div v-if="project.users.length > 0" class="participants-container information">
           <div class="information label">Participants</div>
@@ -51,7 +53,8 @@
 
       </div>
     </modal>
-    <ProjectForm v-if="showModal" @close="showModal = false" :header="project.name" :project="project"/>
+    <ProjectForm v-if="showModal" @close="showModal = false" :header="project.name"
+                 :project="project"/>
   </div>
 </template>
 
@@ -72,7 +75,7 @@
         participants: [],
         tags: [],
         participate: false,
-        isCreator : false,
+        isCreator: false,
         userId: 0,
         users: [],
       }
@@ -89,7 +92,7 @@
           return;
         }
         let users = this.project.users;
-        for (let i= 0; i < users.length; i ++) {
+        for (let i = 0; i < users.length; i++) {
           if (users[i].id === this.userId) {
             this.participate = true;
             return;
@@ -109,10 +112,9 @@
         console.log(this.project);
 
         let addr = "/works/" + this.project.id;
-        http.delete(addr, {})
-          .then(response => { //@TODO
-            this.$emit("deleteProject", project);
-          });
+        http.delete(addr).then(response => {
+          //Yeah deleted
+        });
       },
     },
     mounted() {
@@ -138,6 +140,7 @@
     border-radius: 4px;
     padding: 10px 10px;
   }
+
   .tags-container {
     display: flex;
     flex-wrap: wrap;
@@ -149,6 +152,7 @@
     display: flex;
     flex-direction: row;
   }
+
   .information {
     flex: 0 0 100%;
   }

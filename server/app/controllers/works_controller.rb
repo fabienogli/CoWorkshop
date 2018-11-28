@@ -40,8 +40,7 @@ class WorksController < ApplicationController
     if is_current_user(@work.user.id)
       @work.destroy
       ActionCable.server.broadcast "works", {
-          work: @work,
-          added: false,
+          work: @work.to_json(:include => @@includes),
           from_stream: "works",
       }
       json_response(@work)

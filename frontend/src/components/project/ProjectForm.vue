@@ -99,38 +99,29 @@
           "name": this.name,
           "desc": this.desc,
         }).then(response => { //@TODO notify user
-          let project = response.data;
-          let diff = this.diffBetween(project.tags, this.$refs.tagInput.getTags());
-          project.tags = this.saveTags(project.id, diff.new);
-          diff.old.forEach(tag => {
-              let addr = "/works/" + project.id + "/tags/" + tag.id;
-              http.delete(addr, {}).then(e => { //@TODO notify user
-                console.log(e)});
+          const project = response.data;
+          const oldTags = project.tags.map(tag => tag.id);
+          const newTags = this.$refs.tagInput.getTags().map(tag => tag.id);
+
+          const toRemove = this.diff(oldTags, newTags);
+          const toAdd = this.diff(newTags, oldTags);
+
+          toRemove.forEach(tagId => {
+            http.delete(`/works/${project.id}/tags/${tagId}`)
+              .then(() => { /* Yeah */ });
           });
-          this.$emit('updateProject', project);
+
+          http.post(`/works/${project.id}/tags/`, {
+            tag_id: toAdd,
+          }).then(() => { /* Yeah */});
+
+          project.tags = newTags;
+          this.$store.dispatch('works/updateWork', project);
           this.close();
         });
       },
-      diffBetween(_before, after) {
-        let newItems = after.filter(it => _before.indexOf(it) === -1);
-        let oldItems = _before.filter(it => after.indexOf(it) === -1);
-        return {
-          new: newItems,
-          old: oldItems,
-        }
-      },
-      saveTags(projectId, tags) {
-        if (tags.length < 1) {
-          return [];
-        }
-        let tagsId = tags.map(tag => {
-          return tag.id;
-        });
-        let addr = "/works/" + projectId + "/tags";
-        http.post(addr, {
-          "tag_id": tagsId,
-        });
-        return tags
+      diff(first, second) {
+        return first.filter(it => second.indexOf(it) === -1);
       },
     },
     mounted() {
