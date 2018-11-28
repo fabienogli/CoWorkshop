@@ -27,18 +27,18 @@
              v-model.trim="password">
 
       <input type="password"
-             placeholder="Password"
+             placeholder="Confirm password"
              class="input password"
              id="password_confirm"
              v-model.trim="password_confirm">
 
-      <div>
+      <div class="message">
         Already have an account ?
-        <router-link  class="login-link" to="/login"> Sign in now !</router-link>
+        <router-link class="login-link" to="/login"> Sign in</router-link>
       </div>
 
       <div class="submit-container">
-        <button type="submit" class="submit">Register</button>
+        <button type="submit" class="submit button">Register</button>
         <div class="empty"></div>
       </div>
     </form>
@@ -70,7 +70,7 @@
           && this.password === this.password_confirm;
       },
       register() {
-        if(this.isValidForm()) {
+        if (this.isValidForm()) {
           const url = `${env.url}/users`;
           axios.post(url, {
             "email": this.email,
@@ -90,6 +90,61 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "~@/styles/_variable";
 
+  .register {
+    padding: 30px;
+    .form {
+      padding: 30px;
+      border: 1px solid black;
+      box-shadow: 10px 10px 10px $accentColor;
+      border-radius: 7px;
+      display: flex;
+      flex-direction: column;
+      max-width: 30%;
+      margin: auto;
+
+      .input {
+        flex: 1;
+        border: 1px solid $lightGrey;
+        padding: 5px;
+
+        border-radius: 5px;
+        outline-width: 0;
+        min-height: 30px;
+        font-size: 15px;
+        margin: 3px;
+        &:focus {
+          box-shadow: 0 0 1px 1px $accentColor;
+        }
+      }
+
+      .message {
+        padding: 5px;
+        font-size: 18px;
+
+        .login-link {
+          color: #008CBA;
+          text-decoration: none;
+        }
+      }
+
+      .submit-container {
+        flex: 1;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-around;
+        .submit {
+          flex: 1;
+
+          padding: 10px;
+          background-color: $accentColor;
+        }
+        .empty {
+          flex: 4
+        }
+      }
+    }
+  }
 </style>
