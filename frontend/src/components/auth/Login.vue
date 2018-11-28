@@ -13,12 +13,12 @@
              id="password"
              v-model.trim="password">
 
-      <div>
+      <div class="message">
         Don't have an account ?
-        <router-link  class="register-link" to="/register"> Register now !</router-link>
+        <router-link  class="register-link" to="/register"> Register now</router-link>
       </div>
       <div class="submit-container">
-        <button type="submit" class="submit">Log in</button>
+        <button type="submit" class="submit button">Log in</button>
         <div class="empty"></div>
       </div>
     </form>
@@ -51,33 +51,56 @@
 </script>
 
 <style lang="scss">
+  @import "~@/styles/_variable";
   .login {
-    //margin: auto;
-    max-width: 40%;
-    max-height: 20%;
-    padding: 3px;
+    padding: 30px;
     .form {
-      padding-bottom: 2px;
+      padding: 30px;
+      border: 1px solid black;
+      box-shadow: 10px 10px 10px $accentColor;
+      border-radius: 7px;
       display: flex;
       flex-direction: column;
-      max-width: 50%;
+      max-width: 30%;
       margin: auto;
 
-      .email {
+      .email, .password {
         flex: 1;
+        border: 1px solid $lightGrey;
+        padding: 5px;
+
+        border-radius: 5px;
+        outline-width: 0;
+        min-height: 30px;
+        font-size: 15px;
+        margin: 3px;
+        &:focus {
+          box-shadow: 0 0 1px 1px $accentColor;
+        }
       }
 
-      .password {
-        flex: 1;
+      .message {
+        padding: 5px;
+        font-size: 18px;
+
+        .register-link {
+          color: #008CBA;
+          text-decoration: none;
+        }
       }
+
+
 
       .submit-container {
         flex: 1;
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         justify-content: space-around;
         .submit {
-          flex: 1
+          flex: 1;
+
+          padding: 10px;
+          background-color: $accentColor;
         }
         .empty {
           flex: 4
