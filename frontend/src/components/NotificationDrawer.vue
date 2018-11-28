@@ -1,12 +1,17 @@
 <template>
   <div class="notification-drawer">
-    <div v-for="notif in notifications"
-         class="notification-item"
-         :class="isRead(notif)"
-         @click="notifClicked(notif)"
-    >
-      {{notif.title}}
+    <div class="notification-wrapper">
+      <div v-for="notif in notifications"
+           class="notification-item"
+           :class="isRead(notif)"
+           @click="notifClicked(notif)">
+        {{notif.title}}
+        <span @click.stop="setRead(notif)" class="mark-as-read" :class="isRead(notif)"></span>
+      </div>
+
+
     </div>
+
   </div>
 </template>
 
@@ -24,6 +29,13 @@
         this.$store.dispatch('notification/setRead', notif);
         if(notif.redirects_to) {
           this.$router.push(notif.redirects_to);
+        }
+      },
+      setRead(notif) {
+        if(!notif.read) {
+          this.$store.dispatch('notification/setRead', notif);
+        } else {
+          this.$store.dispatch('notification/setUnread', notif);
         }
       }
     },
@@ -71,9 +83,23 @@
         border-bottom-right-radius: 3px;
       }
 
+      .mark-as-read {
+        height: 10px;
+        width: 10px;
+        background-color: #eeeeee;
+        border-radius: 50%;
+        display: inline-block;
+
+        border: 1px solid $lightGrey;
+
+        &.unread {
+          background-color: #636363;
+        }
+      }
+
     }
     .unread {
-      background: #787878;
+      background: #787878 !important;
     }
   }
 </style>
