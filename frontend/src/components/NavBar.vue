@@ -1,6 +1,5 @@
 <template>
   <div id="navBar">
-    <h1></h1>
     <ul>
       <li v-for="route in routes">
         <router-link active-class="active" v-if="connected" class="custom"
