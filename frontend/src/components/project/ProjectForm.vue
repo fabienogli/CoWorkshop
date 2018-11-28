@@ -2,14 +2,12 @@
   <div id="projectForm">
     <modal @close="close">
       <h1 slot="header" class="title">{{top}}</h1>
-      <div slot="body">
-        <div class="name">
-          <label for="name"><h2>Name</h2></label>
-          <input class="input" id="name" v-model="name" type="text" name="name">
+      <div slot="body" class="modal-body">
+        <div class="input-container">
+          <input class="input" placeholder="Name" id="name" v-model="name" type="text" name="name">
         </div>
-        <div class="description">
-          <label for="desc"><h3>Description</h3></label>
-          <input class="input" id="desc" v-model="desc" type="text" name="desc">
+        <div class="input-container">
+          <input class="input" placeholder="Description" id="desc" v-model="desc" type="text" name="desc">
         </div>
         <TagInput :tags="project.tags" ref="tagInput"/>
       </div>
@@ -144,4 +142,13 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 
+  .input {
+    width: 80%;
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 </style>

@@ -58,7 +58,7 @@
   .modal-container {
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 50%;
     padding: 20px 30px;
     background-color: $primaryColor;
     border-radius: 23px;
@@ -68,10 +68,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     transition: all .3s ease;
-
   }
+
   .modal-mask {
     width: 100%;
     min-height: 100%;
@@ -108,6 +107,7 @@
   }
   .modal-body {
     padding: 5px 2px;
+    width: 80%;
   }
 
 </style>

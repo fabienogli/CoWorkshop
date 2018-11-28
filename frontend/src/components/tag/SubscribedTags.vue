@@ -1,8 +1,9 @@
 <template>
   <div id="subscribedTags">
-    Subscriptions:
-    <tag-list :tags="tags" :button="'unsub'" @action="unsubs" :style="created" >
-    </tag-list>
+    <div class="subscription-container" v-if="tags.length > 0" >
+      <h2>Subscriptions</h2>
+      <tag-list :tags="tags" :button="'Unsubscribe'" @action="unsubs" :design="'delete'" />
+    </div>
   </div>
 </template>
 

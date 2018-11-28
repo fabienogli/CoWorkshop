@@ -4,17 +4,13 @@
       <h1 class="title" slot="header">Create a new Tag !</h1>
       <div slot="body">
         <div>
-          <label for="name">
-            <h2>name</h2>
-          </label>
-          <input id="name" class="input" v-model="name" type="text" name="name">
+          <input id="name" placeholder="Enter the tag name" class="input" v-model="name" type="text" name="name">
         </div>
       </div>
-      <button slot="footer" class="modal-default-button button create" @click="createTag">
+      <button slot="footer" class="button create" @click="createTag">
         OK
       </button>
     </modal>
-
   </div>
 </template>
 
@@ -59,4 +55,18 @@
 </script>
 
 <style lang="scss">
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .button {
+    flex: 1;
+  }
+  .modal-container {
+    align-items: center;
+    flex-direction: column;
+
+  }
+
 </style>

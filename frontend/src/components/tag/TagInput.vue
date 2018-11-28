@@ -1,7 +1,7 @@
 <template>
-  <div id="tagInput">
+  <div id="tagInput" class="tesr">
     <div class="tags">
-      <label><h3>Tags</h3></label>
+      <div class="subtitle">Tags</div>
       <div class="input input-container" @mousedown.prevent="setFocus">
         <div class="tag-selected" v-for="tag in tags">
           {{tag.name}} <i class="fas fa-times" @click="remove(tag)"></i>
@@ -148,6 +148,7 @@
     flex-flow: row wrap;
     justify-content: flex-start;
     align-items: stretch;
+    width: 80%;
   }
   .tag-selected {
     border: 1px solid $accentColor;
@@ -163,5 +164,19 @@
   }
   .tag-input:focus {
     outline: none;
+  }
+  .subtitle {
+    text-align: center;
+    padding: 2px 2px;
+  }
+  .tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .modal-container {
+    align-items: center;
+    width: 460px;
   }
 </style>
