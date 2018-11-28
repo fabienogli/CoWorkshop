@@ -43,7 +43,6 @@ const login = (email, password) => {
     const payload = createPayload(email, password);
     axios.post(loginUrl, payload).then((response) => {
       setAuth(response.data);
-      
       getAllNotifications(response.data.user.id);
       resolve();
     }).catch((error) => {

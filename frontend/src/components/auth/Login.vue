@@ -1,6 +1,9 @@
 <template>
   <div class="login">
     <form @submit.prevent="login" class="form">
+      <div v-for="error in formErrors" class="errors">
+        {{error}}
+      </div>
       <input type="text"
              placeholder="Email"
              class="input email"
@@ -43,10 +46,28 @@
     methods: {
       login() {
         if (this.email !== '' && this.password !== '') {
-          loginAndRedirectTo(this.email, this.password);
+          loginAndRedirectTo(this.email, this.password)
+            .catch((error) => {
+              if (error.response) {
+                if (error.response.status === 404) {
+                  this.formErrors.push('Invalid username/password, check the credentials');
+                }
+              }
+            })
         }
       },
+      resetFormErrors() {
+        this.formErrors = [];
+      }
     },
+    watch: {
+      email() {
+        this.resetFormErrors();
+      },
+      password() {
+        this.resetFormErrors();
+      }
+    }
   }
 </script>
 
@@ -54,6 +75,11 @@
   @import "~@/styles/_variable";
   .login {
     padding: 30px;
+    .errors {
+      font-size: 18px;
+      color: #f44336;
+      padding-bottom: 5px;
+    }
     .form {
       padding: 30px;
       border: 1px solid black;
@@ -88,8 +114,6 @@
           text-decoration: none;
         }
       }
-
-
 
       .submit-container {
         flex: 1;
