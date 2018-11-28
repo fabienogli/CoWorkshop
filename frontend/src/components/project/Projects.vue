@@ -29,6 +29,7 @@
           });
       },
       addWork(work) {
+        work.user = this.$store.getters['auth/user'];
         this.projects.push(work);
       },
       deleteProject(project) {

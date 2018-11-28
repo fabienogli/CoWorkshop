@@ -64,7 +64,7 @@
     margin: auto;
     flex-direction: column;
     padding-top: 30px;
-
+    min-width: 75%;
     .mark-all-as-read {
       text-align: right;
       font-size: 17px;
@@ -80,6 +80,7 @@
       border-left: 1px solid $lightGrey;
       border-right: 1px solid $lightGrey;
       flex: 1;
+      ;
       max-height: 30px;
       cursor: pointer;
       margin: 0;
