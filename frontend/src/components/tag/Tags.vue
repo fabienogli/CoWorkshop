@@ -49,6 +49,9 @@
         }).then(response => {
           console.log(response);
           this.$refs.subscription.addTag(tag);
+          this.$subscriber.perform('TagChannel', 'another_sub', {
+            tag: tag.name,
+          })
         });
       },
     },
