@@ -48,24 +48,12 @@ class Subscriber {
       }
       
       if (message.type === 'confirm_subscription') {
-        console.log('Subscription confirmed for ')
-        console.log(message.identifier);
         return;
       }
       
       if (message.identifier) {
         const {channel} = JSON.parse(message.identifier);
         this.channels[channel].fn(message);
-        //code use to handle multiple callbacks
-        // TODO irindul 2018-11-26 : remove if not used
-        /*Object.keys(this.channels)
-          .filter((chan) => chan.id === channel.id)
-          .forEach(chan => {
-            this.channels[chan].map(handler => handler.callback)
-              .forEach(fn => fn(message));
-          });*/
-        
-        
       } else {
         this.onmessage(message);
       }
@@ -88,17 +76,6 @@ class Subscriber {
       this.socket.send(JSON.stringify(msg));
       
       this.channels[channel] = {fn};
-      
-      //Code to handle multiple callback for each channel
-      //// TODO irindul 2018-11-26 : remove if not necessary
-      /* if (this.channelDoesNotExist(channel)) {
-         this.channels[channel] = [];
-       }
-       const handler = {
-         id: id,
-         callback: fn,
-       };
-       this.channels[channel].push(handler);*/
     }
     else {
       clearTimeout(retryId);

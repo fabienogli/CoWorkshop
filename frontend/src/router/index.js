@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import store from '@/store'
+import http from '@/http'
 
 import Login from '@/components/auth/Login'
 import Register from '@/components/auth/Register'
@@ -96,8 +97,15 @@ const refreshNotifs = () => {
   if(shouldRefresh) {
     getAllNotifications(store.getters['auth/user_id']);
     store.dispatch('notification/setRefresh', false);
-  } else {
-    console.log('didnot refresh ;)')
+  }
+};
+
+const handleWorkWebsocket = (data) => {
+  const {work, user, subscribe } = data.message;
+  if(subscribe === true) {
+    this.onSubscribe(work, user);
+  } else if(subscribe === false) {
+    this.onUnsubscribe(work, user);
   }
 };
 
