@@ -1,6 +1,6 @@
 class TagChannel < ApplicationCable::Channel
   def subscribed
-
+    stream_from "tags"
   end
 
   def subscribe_all(data)

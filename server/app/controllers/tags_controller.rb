@@ -10,6 +10,11 @@ class TagsController < ApplicationController
   # POST /tags
   def create
     @tag = Tag.create!(tag_params)
+    ActionCable.server.broadcast "tags", {
+        tag: @tag,
+        added: true,
+        from_stream: "tags",
+    }
     json_response(@tag, :created)
   end
 
@@ -27,6 +32,11 @@ class TagsController < ApplicationController
   # DELETE /tags/:id
   def destroy
     @tag.destroy
+    ActionCable.server.broadcast "tags", {
+        tag: @tag,
+        added: false,
+        from_stream: "tags"
+    }
     json_response(@tag)
   end
 

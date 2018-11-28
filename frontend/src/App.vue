@@ -61,10 +61,20 @@
           http.get(`/users/${user_id}`)
             .then((response) => {
               this.$subscriber.subscribe('TagChannel', (data) => {
-                const {tag, work} = data.message;
-                if(work.user_id !== user_id) {
-                  const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`;
-                  this.createAndDispatchNotification(title, '/works');
+                const {from_stream} = data.message;
+                if(from_stream.equals('tags')) {
+                  const {tag, added} = data.message;
+                  if(added) {
+                    //Add new tag to store
+                  } else {
+                    //Remove tag from store
+                  }
+                } else {
+                  const {work, tag} = data.message;
+                  if(work.user_id !== user_id) {
+                    const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`;
+                    this.createAndDispatchNotification(title, '/works');
+                  }
                 }
               });
               this.$subscriber.perform('TagChannel', 'subscribe_all', {

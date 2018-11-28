@@ -86,6 +86,7 @@ class WorksController < ApplicationController
         ActionCable.server.broadcast "tags_#{tag[:name]}", {
             work: @work,
             tag: tag,
+            from_stream: "tags_#{tag[:name]}",
         }
         create_tag_notifications(@work, tag)
       end
