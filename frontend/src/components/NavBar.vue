@@ -127,11 +127,15 @@
       position: absolute;
       top: 1px;
       right: 1px;
-      padding: 2px 5px;
+      text-align:center;
+      line-height:18px;
+      box-shadow:0 0 1px #333;
+      width:18px;
+      height:18px;
       border-radius: 50%;
-      background: red;
+      background: #dc2010;
       color: white;
-
+      font-size: 12px;
     }
 
     &:hover {
