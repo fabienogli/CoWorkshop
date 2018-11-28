@@ -1,6 +1,7 @@
 const state = {
   token: '',
   user_id: 0,
+  user: {},
 };
 
 const getters = {
@@ -9,6 +10,9 @@ const getters = {
   },
   user_id(state) {
     return state.user_id
+  },
+  user(state) {
+    return state.user
   }
 };
 
@@ -18,18 +22,22 @@ const mutations = {
   },
   setUserId(state, id) {
     state.user_id = id;
+  },
+  setUser(state, user) {
+    state.user = user;
   }
 };
 
 const actions = {
-  setTokenAndUserId({commit}, payload) {
-    commit('replaceToken', payload.token);
-    commit('setUserId', payload.user.id);
+  setTokenAndUserId({commit}, {token, user}) {
+    commit('replaceToken', token);
+    commit('setUserId', user.id);
+    commit('setUser', user);
   },
   logout({commit}) {
     commit('replaceToken', "");
     commit('setUserId', 0);
-  }
+  },
 };
 
 export default {
