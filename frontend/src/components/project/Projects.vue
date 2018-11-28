@@ -2,7 +2,7 @@
   <div id="projects" class="projects">
     <h1>Projects Component</h1>
     <ProjectForm v-if="showModal" @close="showModal = false" @newProject="addWork"/>
-    <ProjectList :projects="projects"/>
+    <ProjectList :projects="projects" @deleteProject="deleteProject"/>
     <br/>
     <button class="button create" id="show-modal" @click="showModal = true" >Créer un projet</button>
   </div>
@@ -31,6 +31,9 @@
       addWork(work) {
         this.projects.push(work);
       },
+      deleteProject(project) {
+        this.projects.splice(this.projects.indexOf(project), 1);
+      }
     },
     mounted() {
       this.getWorks();

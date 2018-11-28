@@ -26,9 +26,14 @@
         </div>
       </div>
       <div slot="footer">
-        <button v-if="isCreator" @click="update" class="button update">
-          Update
-        </button>
+        <div v-if="isCreator">
+          <button  @click="deleteProject" class="button delete">
+            Delete
+          </button>
+          <button  @click="update" class="button update">
+            Update
+          </button>
+        </div>
         <button v-if="!participate" @click="joinWork" class="button create">
           Join the Project
         </button>
@@ -86,6 +91,17 @@
         }).then(response => {
           this.close();
         });
+      },
+      deleteProject() {
+        console.log("deleteProject");
+        console.log(this.project);
+
+        let addr = "/works/" + this.project.id;
+        http.delete(addr, {})
+          .then(response => { //@TODO
+            console.log(response);
+            this.$emit("deleteProject", project);
+          });
       },
     },
     mounted() {
