@@ -54,12 +54,14 @@
             user_id: user_id,
           });
 
-          http.get(`/users/${this.$store.getters['auth/user_id']}`)
+          http.get(`/users/${user_id}`)
             .then(response => {
               this.$subscriber.subscribe('TagChannel', (data) => {
                 const {tag, work} = data.message;
-                const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`
-                this.createAndDispatchNotification(title, '/works');
+                if(work.user_id !== user_id) {
+                  const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`
+                  this.createAndDispatchNotification(title, '/works');
+                }
               }, {
                 tags: response.data.tags
               })
