@@ -7,7 +7,7 @@ import router from './router';
 const mapCookieToObject = (cookie) => {
   return {
     token: cookie.token,
-    user: {id: cookie.id}
+    user:  cookie.user,
   }
 };
 
@@ -15,6 +15,7 @@ const mapObjectToCookie = (object) => {
   return {
     token: object.token,
     id: object.user.id,
+    user: object.user,
   }
 };
 
