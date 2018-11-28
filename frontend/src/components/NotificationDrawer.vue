@@ -45,6 +45,7 @@
     flex-direction: column;
     padding-top: 30px;
     .notification-item {
+      font-size: 18px;
       padding-left: 10px;
       padding-top: 10px;
       border-bottom: 1px solid $lightGrey;
@@ -53,6 +54,8 @@
       flex: 1;
       max-height: 30px;
       cursor: pointer;
+      margin: 0;
+      text-align: center;
 
       justify-content: center;
       &:nth-child(2n) {

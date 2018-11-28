@@ -110,6 +110,7 @@
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
+      font-size: 16px;
       &:hover {
         background-color: #111;
       }
