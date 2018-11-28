@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import http from '@/http';
   export default {
     name: 'Home',
     components:{
@@ -43,9 +44,22 @@
       }
     },
     mounted() {
+      // TODO irindul 2018-11-27 : Move somewhere else (router oupsi)
+      const user_id = this.$store.getters['auth/user_id'];
       this.$subscriber.subscribe('WorkChannel', this.handleWorkWebsocket, {
-        user_id: this.$store.getters['auth/user_id'],
+        user_id: user_id,
       });
+
+      http.get(`/users/${this.$store.getters['auth/user_id']}`)
+        .then(response => {
+          this.$subscriber.subscribe('TagChannel', (data) => {
+            const {tag, work} = data.message;
+            const title = `A new project (${work.name}) was created with the tag ${tag.name} that you follow !`
+            this.createAndDispatchNotification(title, '/works');
+          }, {
+            tags: response.data.tags
+          })
+        })
     }
   }
 </script>

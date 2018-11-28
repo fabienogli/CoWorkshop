@@ -29,7 +29,7 @@
     },
     computed: {
       notifications() {
-        return this.$store.getters['notification/notifs'].slice().sort((a, b) => a.id - b.id);
+        return this.$store.getters['notification/notifs'].slice().sort((a, b) => b.id - a.id);
       },
     }
   }
