@@ -108,7 +108,6 @@
         });
       },
       deleteProject() {
-        console.log("deleteProject");
         console.log(this.project);
 
         let addr = "/works/" + this.project.id;

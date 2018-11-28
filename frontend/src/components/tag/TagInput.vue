@@ -115,18 +115,17 @@
       }
     },
     mounted() {
-      http.get("/tags")
-        .then(response => {
-          let tagsId = this.tags.map(tag => {
-            return tag.id;
-          });
-          response.data.forEach(tag => {
-            if (tagsId.indexOf(tag.id) !== -1) {
-              return;
-            }
-            this.dbTags.push(tag);
-          });
-        });
+      let tagsId = this.tags.map(tag => {
+        return tag.id;
+      });
+      let tmp = this.$store.getters['tags/all'];
+
+      tmp.forEach(tag => {
+        if (tagsId.indexOf(tag.id) !== -1) {
+          return;
+        }
+        this.dbTags.push(tag);
+      });
     },
   }
 </script>

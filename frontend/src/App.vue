@@ -24,8 +24,15 @@
     },
     mounted() {
       this.setUpWebsockets(this.token);
+      this.fetchTags();
     },
     methods: {
+      fetchTags() {
+        http.get("/tags")
+          .then(response => {
+            this.$store.dispatch('tags/setTags', response.data);
+          });
+      },
       handleWorkWebsocket(data) {
         const {from_stream} = data.message;
         if(from_stream === 'works') {
@@ -82,8 +89,10 @@
                   const {tag, added} = data.message;
                   if(added) {
                     this.$store.dispatch('tags/addTag', tag);
+                    this.$store.dispatch('availableTags/add', tag);
                   } else {
                     this.$store.dispatch('tags/removeTag', tag);
+                    this.$store.dispatch('availableTags/remove', tag);
                   }
                 } else {
                   const {work, tag} = data.message;
