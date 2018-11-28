@@ -86,9 +86,10 @@
           "name": this.name,
           "desc": this.desc,
           "user_id": this.userId
-        }).then(response => {
+        }).then(response => { //@TODO notify user
           let project = response.data;
-          project.tags = this.saveTags(project.id);
+          let tags = this.$refs.tagInput.getTags();
+          project.tags = this.saveTags(project.id, tags);
           this.$emit('newProject', project);
           this.close();
         });
@@ -98,40 +99,28 @@
         http.put(addr, {
           "name": this.name,
           "desc": this.desc,
-        }).then(response => {
+        }).then(response => { //@TODO notify user
           let project = response.data;
-          let oldTags = project.tags;
-          project.tags = this.saveTags(project.id);
-          let diffBetween = this.diffBetween(oldTags, project.tags);
-          oldTags.forEach(tag => {
-            if (tags_id.indexOf(tag.id) < 0) {
+          let diff = this.diffBetween(project.tags, this.$refs.tagInput.getTags());
+          project.tags = this.saveTags(project.id, diff.new);
+          diff.old.forEach(tag => {
               let addr = "/works/" + project.id + "/tags/" + tag.id;
-              http.delete(addr, {}).then(e => {console.log(e)});
-            }
+              http.delete(addr, {}).then(e => { //@TODO notify user
+                console.log(e)});
           });
           this.$emit('updateProject', project);
           this.close();
         });
       },
-      diffBetween(_before, after) {    //Enough to do the same function -> we supposed both have an id
-        console.log("dans diffBetween");
-        let newItems = [];
-        let before = _before.map(item => { return item.id});
-        after.forEach(item => {
-          let index = before.indexOf(item.id);
-          if ( index !== -1) {
-            return;
-          }
-          newItems.push(item.id);
-          before.slice(index, 1);
-        });
+      diffBetween(_before, after) {
+        let newItems = after.filter(it => _before.indexOf(it) === -1);
+        let oldItems = _before.filter(it => after.indexOf(it) === -1);
         return {
           new: newItems,
-          old: before,
+          old: oldItems,
         }
       },
-      saveTags(projectId) {
-        let tags = this.$refs.tagInput.getTags();
+      saveTags(projectId, tags) {
         if (tags.length < 1) {
           return [];
         }
