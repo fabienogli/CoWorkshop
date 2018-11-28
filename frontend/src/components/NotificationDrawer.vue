@@ -1,5 +1,8 @@
 <template>
   <div class="notification-drawer">
+    <div class="mark-all-as-read" @click="setAllRead">
+      Mark all as read
+    </div>
     <div class="notification-wrapper">
       <div v-for="notif in notifications"
            class="notification-item"
@@ -37,6 +40,11 @@
         } else {
           this.$store.dispatch('notification/setUnread', notif);
         }
+      },
+      setAllRead(notif) {
+        this.notifications.forEach(notif => {
+          this.$store.dispatch('notification/setRead', notif);
+        })
       }
     },
     computed: {
@@ -56,6 +64,15 @@
     margin: auto;
     flex-direction: column;
     padding-top: 30px;
+
+    .mark-all-as-read {
+      text-align: right;
+      font-size: 17px;
+      color: #008CBA;
+      &:hover {
+        cursor: pointer;
+      }
+    }
     .notification-item {
       font-size: 18px;
       padding-left: 10px;
