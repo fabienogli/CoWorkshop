@@ -117,7 +117,15 @@
     mounted() {
       http.get("/tags")
         .then(response => {
-          this.dbTags = response.data;
+          let tagsId = this.tags.map(tag => {
+            return tag.id;
+          });
+          response.data.forEach(tag => {
+            if (tagsId.indexOf(tag.id) !== -1) {
+              return;
+            }
+            this.dbTags.push(tag);
+          });
         });
     },
   }

@@ -85,20 +85,42 @@
         http.post("/works", {
           "name": this.name,
           "desc": this.desc,
-          "user_id": this.userId,
-          "tags": this.tags,
-        }).then(response => {
+          "user_id": this.userId
+        }).then(response => { //@TODO notify user
           let project = response.data;
-          project.tags = this.saveTags(project.id);
+          let tags = this.$refs.tagInput.getTags();
+          project.tags = this.saveTags(project.id, tags);
           this.$emit('newProject', project);
           this.close();
         });
       },
       update() {
-        //@TODO
+        let addr = "/works/" + this.project.id;
+        http.put(addr, {
+          "name": this.name,
+          "desc": this.desc,
+        }).then(response => { //@TODO notify user
+          let project = response.data;
+          let diff = this.diffBetween(project.tags, this.$refs.tagInput.getTags());
+          project.tags = this.saveTags(project.id, diff.new);
+          diff.old.forEach(tag => {
+              let addr = "/works/" + project.id + "/tags/" + tag.id;
+              http.delete(addr, {}).then(e => { //@TODO notify user
+                console.log(e)});
+          });
+          this.$emit('updateProject', project);
+          this.close();
+        });
       },
-      saveTags(projectId) {
-        let tags = this.$refs.tagInput.getTags();
+      diffBetween(_before, after) {
+        let newItems = after.filter(it => _before.indexOf(it) === -1);
+        let oldItems = _before.filter(it => after.indexOf(it) === -1);
+        return {
+          new: newItems,
+          old: oldItems,
+        }
+      },
+      saveTags(projectId, tags) {
         if (tags.length < 1) {
           return [];
         }

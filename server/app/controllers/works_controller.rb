@@ -99,7 +99,7 @@ class WorksController < ApplicationController
 
   def unbound_tags
     if is_current_user(@work.user.id)
-      @tag = @user.tags.find(params[:tag_id])
+      @tag = @work.tags.find(params[:tag_id])
       @work.tags.destroy(@tag)
       json_response(@user, :ok, @@includes)
     else
@@ -111,7 +111,7 @@ class WorksController < ApplicationController
 
   def work_params
     # whitelist params
-    params.permit(:name, :desc, :user_id, :users, :id, :tags)
+    params.permit(:name, :desc, :tag_id, :user_id, :users, :id, :tags)
   end
 
   def set_work

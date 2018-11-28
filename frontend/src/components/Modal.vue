@@ -1,5 +1,5 @@
 <template>
-  <div id="projectForm">
+  <div class="modal">
     <transition name="modal" @keydown.esc="close">
       <div class="modal-mask">
         <div class="modal-wrapper"@click.prevent="close">
@@ -43,6 +43,13 @@
 <style lang="scss">
   @import "~@/styles/_variable";
 
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%
+  }
   .modal-wrapper {
     display: table-cell;
     vertical-align: middle;
@@ -66,12 +73,8 @@
 
   }
   .modal-mask {
-    position: absolute;
-    z-index: 9998;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background-color: rgba(0, 0, 0, .5);
     display: table;
     transition: opacity .3s ease;
