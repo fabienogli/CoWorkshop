@@ -7,10 +7,16 @@
                      :to="{ name: route.name }">{{ route.text }}
         </router-link>
       </li>
-      <li class="notification">
+      <li class="notification"  v-if="connected">
         <a class="notification-icon fa fa-bell" @click="openNotifications"></a>
         <span class="badge" v-if="notifCount > 0">{{notifCount}}</span>
       </li>
+
+      <li class="user" v-if="connected">
+        <a class="user-icon far fa-user"></a>
+        <span class="user-info">{{username}}</span>
+      </li>
+
       <li>
         <a @click="out" href="#">
           Logout
@@ -51,6 +57,10 @@
     computed: {
       connected() {
         return this.$store.getters['auth/token'] !== '';
+      },
+      username() {
+        const userPseudo = this.$store.getters['auth/user'].pseudo;
+        return userPseudo.charAt(0).toUpperCase() + userPseudo.substring(1).toLowerCase();
       },
       notifications() {
         return this.$store.getters['notification/notifs']
@@ -105,7 +115,7 @@
         background-color: #111;
       }
     }
-    &:nth-last-child(-n+2) {
+    &:last-child {
       float: right;
     }
   }
@@ -126,6 +136,21 @@
 
     &:hover {
       cursor: pointer;
+    }
+  }
+
+  .user {
+    margin-left: 10px;
+    border-left: 1px solid $lightGrey;
+    .user-icon {
+
+      &:hover {
+        background-color: $accentColor;
+      }
+    }
+    .user-info {
+      color: #FFF;
+      margin-left: -10px;
     }
   }
 
