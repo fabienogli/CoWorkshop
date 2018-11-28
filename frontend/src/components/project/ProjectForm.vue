@@ -98,6 +98,16 @@
           this.close();
         });
       },
+      saveTags(projectId, tags) {
+        let tagsId = tags.map(tag => {
+          return tag.id;
+        });
+        let addr = "/works/" + projectId + "/tags";
+        http.post(addr, {
+          "tag_id": tagsId,
+        });
+        return tags
+      },
       update() {
         let addr = "/works/" + this.project.id;
         http.put(addr, {
