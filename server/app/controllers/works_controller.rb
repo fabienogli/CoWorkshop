@@ -1,7 +1,7 @@
 class WorksController < ApplicationController
   before_action :authenticate_user
   before_action :set_work, only: [:show, :update, :destroy, :bind_participants, :unbound_participants, :bind_tags, :unbound_tags]
-  @@includes = [:users, :tags]
+  @@includes = [:users, :tags, :user]
   # GET /works
   def index
     @works = Work.all
