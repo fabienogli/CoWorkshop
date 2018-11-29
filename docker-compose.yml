@@ -1,24 +1,26 @@
 version: '3.2'
-volumes: 
+volumes:
   postgres-data:
 services:
   db:
     image: postgres
-    volumes: 
+    volumes:
       - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432" #TODO for debug only
-    environment: 
+    environment:
       - POSTGRES_USER=inspector
       - POSTGRES_PASSWORD=inspector #TODO Remove into .env file !
 
-  app:
+  backend:
     build:
-      context: .
+      context: ./server
       dockerfile: Dockerfile
+    entrypoint: /project/entrypoint.sh
     command: foreman start -f Procfile.dev -p 3000
     volumes:
-      - .:/project
+      - ./server:/project
+      - ./server/entrypoint.sh:/project/entrypoint.sh
       - type: tmpfs
         target: /project/tmp/pids/
     ports:
@@ -26,3 +28,17 @@ services:
       - "35729:35729"
     depends_on:
       - db
+  web :
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+
+    entrypoint: /webapp/entrypoint.sh
+    command: yarn dev
+    volumes:
+      - ./frontend:/webapp
+    ports:
+    - 8080:8080
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
