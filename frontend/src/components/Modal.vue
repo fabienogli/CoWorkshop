@@ -1,8 +1,8 @@
 <template>
   <div class="modal">
-    <transition name="modal" @keydown.esc="close">
+    <transition name="modal">
       <div class="modal-mask">
-        <div class="modal-wrapper"@click.prevent="close">
+        <div class="modal-wrapper" @click.prevent="close">
           <div class="modal-container" @click.stop="">
             <div class="modal-header">
               <slot name="header">
@@ -55,20 +55,27 @@
     vertical-align: middle;
   }
 
+  .modal-header {
+    font-size: 25px;
+    color: $primaryText;
+    text-align: center;
+  }
+
   .modal-container {
     display: flex;
     flex-direction: column;
-    width: 460px;
+    width: 650px;
+    min-height: 400px;
     padding: 20px 30px;
     background-color: $primaryColor;
     border-radius: 23px;
-    border: 2px solid $accentColor;
     // Allow to center the modal
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     align-items: center;
+    justify-content: space-around;
     transition: all .3s ease;
   }
 
@@ -100,12 +107,14 @@
   .modal-body {
     padding: 5px 2px;
     width: 80%;
+    font-size: 15px;
   }
   .modal-footer {
     display: flex;
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    font-size: 10px;
   }
 
 </style>

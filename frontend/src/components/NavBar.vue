@@ -104,13 +104,13 @@
   li {
     float: left;
     display: inline;
+    font-size: 25px;
     a {
       display: block;
-      color: #fff5fd;
+      color: $primaryColor;
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
-      font-size: 16px;
       &:hover {
         background-color: #111;
       }

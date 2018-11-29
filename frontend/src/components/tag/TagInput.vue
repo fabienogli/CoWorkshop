@@ -138,8 +138,15 @@
     padding: 5px;
     border-radius: 3px;
   }
+  .item {
+    text-align: center;
+    font-size: 17px
+  }
   .item.selected{
     background-color: $accentColor;
+    color: $primaryColor;
+    border-radius: 4px;
+    padding: 1px 1px;
     cursor: pointer;
   }
   .input-container {
@@ -154,18 +161,21 @@
     background-color: $accentColor;
     border-radius: 4px;
     padding: 10px 10px;
+    color: $primaryColor;
+    font-size: 17px;
   }
   .tag-input {
     padding: 10px 10px;
     -webkit-appearance: none;
     border: none;
-
+    width: 100%;
   }
   .tag-input:focus {
     outline: none;
   }
   .subtitle {
     text-align: center;
+    font-size: 25px;
     padding: 2px 2px;
   }
   .tags {

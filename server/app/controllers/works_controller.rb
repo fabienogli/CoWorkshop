@@ -69,19 +69,17 @@ class WorksController < ApplicationController
 
   # DELETE /works/:id/users/:user_id
   def unbound_participants
-    @user_id = params[:user_id]
+    @user_id = params[:user_id].to_i
     if is_current_user(@user_id)
       @user = @work.users.find(@user_id)
       @work.users.destroy(@user)
-      if @work.user_id != @participant.id
         ActionCable.server.broadcast "works_#{@work.user_id}", {
             work: @work,
             user: @user,
             subscribe: false,
             from_stream: "works_#{@work.user_id}",
         }
-      end
-      create_notification(false, @work, @user)
+        create_notification(false, @work, @user)
       json_response(@work, :ok, @@includes)
     else
       head :forbidden

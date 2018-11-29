@@ -60,18 +60,21 @@
 </script>
 
 <style lang="scss">
-  .modal-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .button {
-    flex: 1;
-  }
   .modal-container {
     align-items: center;
     flex-direction: column;
+  }
 
+  .input {
+    width: 100%;
+    padding: 18px 0;
+    &::placeholder {
+      font-size: 18px;
+      text-align: center
+    }
+    font-size: 20px;
+    text-align: center;
+    height: 100%
   }
 
   .input-wrapper {

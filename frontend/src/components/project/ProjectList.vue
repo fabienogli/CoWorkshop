@@ -1,10 +1,8 @@
 <template>
   <div class="projectList">
     <div v-for="project in projects" class="item-container">
-      <div >
         <ProjectPreview :project="project" @deleteProject="deleteProject"/>
       </div>
-    </div>
   </div>
 </template>
 <script>
@@ -24,11 +22,8 @@
 <style lang="scss" scoped>
   .projectList {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
-  }
-  .item-container {
-    padding: 2px 4px;
-    max-width: 162px;
+    flex-basis: auto;
   }
 </style>
