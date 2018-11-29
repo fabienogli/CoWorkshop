@@ -1,17 +1,17 @@
 <template>
-  <div id="tagList">
-    <table>
+  <div id="tagList" class="tag-list">
+    <table class="table">
       <tr>
-        <th>Nom</th>
-        <th>Created At</th>
-        <th>Updated At</th>
-        <th>Actions</th>
+        <th class="row label">Nom</th>
+        <th class="row label">Created At</th>
+        <th class="row label">Updated At</th>
+        <th class="row label">Actions</th>
       </tr>
-      <tr v-for="tag in tags">
-        <td>{{tag.name}}</td>
-        <td>{{tag.created_at}}</td>
-        <td>{{tag.updated_at}}</td>
-        <td><button :class="['button', design]" @click="action(tag)">{{button}}</button></td>
+      <tr class="table-content" v-for="tag in tags">
+        <td class="row">{{tag.name}}</td>
+        <td class="row">{{tag.created_at}}</td>
+        <td class="row">{{tag.updated_at}}</td>
+        <td class="row"><button :class="['button', design]" @click="action(tag)">{{button}}</button></td>
       </tr>
     </table>
   </div>
@@ -31,30 +31,35 @@
 </script>
 
 <style lang="scss" scoped>
-  table {
+  @import "~@/styles/_variable";
+
+  .table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
   }
 
-  td, th {
+  .row {
     border: 1px solid #ddd;
     padding: 8px;
   }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
+  .table-content:nth-child(even) {
+    background-color: $primaryLightColor;
   }
 
-  tr:hover {
-    background-color: #ddd;
+  .table-content:hover {
+    background-color: $primaryColor;
   }
 
-  th {
+  .label {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #4CAF50;
-    color: white;
+    background-color: $accentColor;
+    color: $secondaryText;
+  }
+  .tag-list {
+    padding: 7px;
   }
 </style>

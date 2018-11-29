@@ -1,14 +1,18 @@
 <template>
   <div id="tags">
-    <div class="create-tag-container">
-      <p>Not enough Tags, create your own !</p>
+  <div class="information">
+    Available Tags
+  </div>
+  <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
+  <div class="create-tag-container">
+      <div class="information">
+        Not enough Tags ? Create your own !
+      </div>
       <div class="button-container">
-        <button class="button update" id="show-modal" @click="showModal = true" >Create a Tag</button>
+        <button class="button tag-create" id="show-modal" @click="showModal = true" >Create a Tag</button>
       </div>
     </div>
-      <TagForm v-if="showModal" @close="showModal = false"/>
-    <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
-    <br/>
+    <TagForm v-if="showModal" @close="showModal = false"/>
     <subscribed-tags :subscriptions="subscriptions"/>
   </div>
 </template>
@@ -76,14 +80,28 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+  @import "~@/styles/_variable";
+
   .button-container {
     padding: 2px 10px;
   }
   .create-tag-container {
     display: flex;
     width: 100%;
-    flex-direction: row;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .information {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+  .tag-create {
+    background-color: $capri;
+    color: $primaryText;
   }
 </style>
