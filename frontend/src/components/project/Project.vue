@@ -9,7 +9,7 @@
       <div slot="body">
         <div class="information-container">
           <div class="information label">Creator</div>
-          <div class="information">{{project.user.pseudo}}</div>
+          <div class="information"><i v-if="isCreator" class="fas fa-crown"></i>{{project.user.pseudo}}</div>
         </div>
         <div class="information-container">
           <div class="information label">Description</div>
@@ -121,6 +121,7 @@
         let addr = "/works/" + this.project.id;
         http.delete(addr).then(response => {
           //Yeah deleted
+          this.close();
         });
       },
     },

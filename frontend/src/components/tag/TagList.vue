@@ -9,8 +9,8 @@
       </tr>
       <tr class="table-content" v-for="tag in tags">
         <td class="row">{{tag.name}}</td>
-        <td class="row">{{tag.created_at}}</td>
-        <td class="row">{{tag.updated_at}}</td>
+        <td class="row">{{tag.created_at | format }}</td>
+        <td class="row">{{tag.updated_at | format }}</td>
         <td class="row"><button :class="['button', design]" @click="action(tag)">{{button}}</button></td>
       </tr>
     </table>
@@ -25,7 +25,11 @@
       action(tag) {
         this.$emit('action', tag);
       },
-
+    },
+    filters: {
+      format(date) {
+        return new Date(date).toLocaleDateString("en-US");
+      }
     },
   }
 </script>
@@ -42,6 +46,7 @@
   .row {
     border: 1px solid #ddd;
     padding: 8px;
+    text-align: center;
   }
 
   .table-content:nth-child(even) {
@@ -55,7 +60,6 @@
   .label {
     padding-top: 12px;
     padding-bottom: 12px;
-    text-align: left;
     background-color: $accentColor;
     color: $secondaryText;
   }

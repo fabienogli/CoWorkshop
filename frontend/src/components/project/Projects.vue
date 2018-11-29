@@ -1,6 +1,6 @@
 <template>
   <div id="projects" class="projects">
-    <div class="information">Projects Component</div>
+    <div class="information">Projects</div>
     <ProjectForm v-if="showModal" @close="showModal = false" @newProject="addWork"/>
     <ProjectList :projects="projects" @deleteProject="deleteProject"/>
     <br/>

@@ -1,20 +1,20 @@
 <template>
   <div class="notification-drawer">
-    <div class="mark-all-as-read" @click="setAllRead">
-      Mark all as read
-    </div>
-    <div class="notification-wrapper">
-      <div v-for="notif in notifications"
-           class="notification-item"
-           :class="isRead(notif)"
-           @click="notifClicked(notif)">
-        {{notif.title}}
-        <span @click.stop="setRead(notif)" class="mark-as-read" :class="isRead(notif)"></span>
+    <div v-if="notifications.length > 0">
+      <div class="mark-all-as-read" @click="setAllRead">
+        Mark all as read
       </div>
-
-
+      <div class="notification-wrapper">
+        <div v-for="notif in notifications"
+             class="notification-item"
+             :class="isRead(notif)"
+             @click="notifClicked(notif)">
+          {{notif.title}}
+          <span @click.stop="setRead(notif)" class="mark-as-read" :class="isRead(notif)"></span>
+        </div>
+      </div>
     </div>
-
+    <div v-else class="information">You don't have any notifications.</div>
   </div>
 </template>
 

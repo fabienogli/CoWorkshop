@@ -38,8 +38,8 @@
     name: "Login",
     data() {
       return {
-        email: "test@test.com",
-        password: "azerty",
+        email: "",
+        password: "",
         formErrors: [],
       }
     },

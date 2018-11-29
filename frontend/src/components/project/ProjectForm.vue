@@ -135,9 +135,7 @@
           project.tags = newTags;
           this.$store.dispatch('works/updateWork', project);
           this.close();
-        }).catch((error) => {
-          console.log(error);
-        })
+        }).catch((error) => {/* Do something */})
       },
       diff(first, second) {
         return first.filter(it => second.indexOf(it) === -1);

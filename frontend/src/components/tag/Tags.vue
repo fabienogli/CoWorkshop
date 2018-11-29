@@ -1,15 +1,20 @@
 <template>
   <div id="tags">
-  <div class="information">
-    Available Tags
-  </div>
-  <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
-  <div class="create-tag-container">
+    <div v-if="tags.length > 0">
+      <div class="information">
+        Available Tags
+      </div>
+      <Tag-list :design="'update'" :tags="tags" :button="'Subscribe'" @action="subs"/>
       <div class="information">
         Not enough Tags ? Create your own !
       </div>
+    </div>
+    <div class="information" v-else>
+      There is no available tag. Create the first one !
+    </div>
+    <div class="create-tag-container">
       <div class="button-container">
-        <button class="button tag-create" id="show-modal" @click="showModal = true" >Create a Tag</button>
+        <button class="button tag-create" id="show-modal" @click="showModal = true">Create a Tag</button>
       </div>
     </div>
     <TagForm v-if="showModal" @close="showModal = false"/>
@@ -33,6 +38,7 @@
     data() {
       return {
         showModal: false,
+        dbTags: [],
       }
     },
     computed: {
@@ -40,15 +46,15 @@
         return this.$store.getters['availableTags/all'];
       },
       subscriptions() {
-        let test = this.$store.getters['subscriptions/all'];
-        return test;
+        return this.$store.getters['subscriptions/all'];
       }
     },
     methods: {
-      getTags() {
+      fetchTags() {
         http.get("/tags")
           .then(response => {
-            this.$store.dispatch('availableTags/set', response.data);
+            this.$store.dispatch('tags/setTags', response.data);
+            this.dbTags = response.data;
           });
       },
       subs(tag) {
@@ -63,18 +69,24 @@
           })
         });
       },
+      setAvailableTags(subscriptions) {   //Ugly but too tired to fine better
+        let subscriptionsId = subscriptions.map(tag => tag.id);
+        let available = this.dbTags.filter(tag => subscriptionsId.indexOf(tag.id) === -1);
+        this.$store.dispatch('availableTags/set', available);
+      },
       fetchSubscriptions() {
         let addr = "/users/" + this.userId;
         http.get(addr)
           .then(response => {
             this.$store.dispatch('subscriptions/set', response.data.tags);
+            this.setAvailableTags(response.data.tags);
           });
       },
     },
     mounted() {
       let user = this.$cookies.get("currentUser");
       this.userId = user.id;
-      this.getTags();
+      this.fetchTags();
       this.fetchSubscriptions();
     },
   }
@@ -87,6 +99,7 @@
   .button-container {
     padding: 2px 10px;
   }
+
   .create-tag-container {
     display: flex;
     width: 100%;
@@ -94,12 +107,14 @@
     justify-content: center;
     align-items: center;
   }
+
   .information {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
   }
+
   .tag-create {
     background-color: $capri;
     color: $primaryText;

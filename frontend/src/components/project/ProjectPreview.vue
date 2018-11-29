@@ -3,9 +3,10 @@
     <div  class="project container" @click="showModal = true">
       <div class="title"><h1 class="no-margin">{{project.name}}</h1></div>
         <div class="information">
-          <div class="information label">Creator:</div> {{project.user.pseudo}}
+          <div class="information label">Creator</div>
+          <i v-if="isCreator" class="fas fa-crown"></i>{{project.user.pseudo}}
         <div class="information">
-          <div class="information label">Description:</div> {{project.desc}}
+          <div class="information label">Description</div> {{project.desc}}
         </div>
         <div class="information" v-if="project.tags.length > 0">
           <div class="information label">Tags</div>
@@ -34,12 +35,16 @@
     data() {
       return {
         showModal: false,
+        isCreator: false,
       }
     },
     methods: {
       deleteProject(project) {
         this.$emit('deleteProject', project)
       }
+    },
+    mounted() {
+      this.isCreator = this.$store.getters['auth/user_id'] === this.project.user_id;
     }
   }
 
@@ -52,13 +57,13 @@
     padding: 8px 8px;
   }
   .project:hover {
-    box-shadow: 5px 12px 24px 6px $primaryLightColor;
+    box-shadow: 5px 12px 24px 6px $lightGrey;
     cursor: pointer;
   }
 
   .container {
     padding: 4px 16px;
-    box-shadow: 4px 4px 8px 3px $primaryLightColor;
+    box-shadow: 4px 4px 8px 3px $lightGrey;
     transition: 0.3s;
     border-radius: 23px;
   }

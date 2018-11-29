@@ -4,7 +4,9 @@
       <div class="subtitle">Tags</div>
       <div class="input input-container" @mousedown.prevent="setFocus">
         <div class="tag-selected" v-for="tag in tags">
-          {{tag.name}} <i class="fas fa-times" @click="remove(tag)"></i>
+          <div class="tag">
+            {{tag.name}} <i class="fas fa-times" @click="remove(tag)"></i>
+          </div>
         </div>
         <input class="tag-input" ref="input"
                v-model="search"
@@ -154,9 +156,9 @@
     flex-flow: row wrap;
     justify-content: flex-start;
     align-items: stretch;
-    width: 80%;
+    width: 100%;
   }
-  .tag-selected {
+  .tag {
     background-color: $capri;
     border-radius: 4px;
     padding: 10px 10px;
@@ -181,6 +183,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .tag-selected {
+    padding: 2px 2px;
   }
 
 </style>

@@ -1,13 +1,16 @@
 <template>
   <div class="home">
     <h1 class="title">{{ msg }}</h1>
-    <div class="item-container">
+    <div class="item-container" v-if="projects.length > 0">
       <div class="information">
         My Projects
       </div>
       <project-list :projects="projects"/>
     </div>
-    <div class="item-container">
+    <div class="item-container information" v-else>
+      You don't have any project yet.
+    </div>
+    <div class="item-container" v-if="tags.length > 0">
       <div class="information">
         My Subscriptions
       </div>
@@ -18,6 +21,9 @@
         </div>
       </div>
       </div>
+    </div>
+    <div class="item-container information" v-else>
+      You don't have any subscriptions yet.
     </div>
   </div>
 </template>
