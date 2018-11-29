@@ -159,7 +159,7 @@
       font-size: 15px;
       text-align: center;
     }
-    font-size: 17px;
+    font-size: 30px;
     text-align: center;
   }
   .input-container {

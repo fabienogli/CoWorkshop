@@ -46,7 +46,10 @@
       </div>
       <div slot="footer">
         <button v-if="!participate" @click="joinWork" class="button create">
-          Join the Project
+          Join
+        </button>
+        <button v-else @click="quitWork" class="button quit">
+          Leave
         </button>
         <div v-if="isCreator" class="button-container">
           <button  @click="update" class="button update">
@@ -106,10 +109,15 @@
         }
       },
       joinWork() {
-        let addr = "/works/" + this.project.id + "/users";
-        http.post(addr, {
+        http.post(`/works/${this.project.id}/users`, {
           "user_id": this.userId,
         }).then(response => {
+          this.$store.dispatch('works/updateWork', response.data);
+          this.close();
+        });
+      },
+      quitWork() {
+        http.delete(`/works/${this.project.id}/users/${this.userId}`, {}).then(response => {
           this.$store.dispatch('works/updateWork', response.data);
           this.close();
         });
@@ -191,5 +199,8 @@
   .tags{
     display: flex;
     flex-flow: row wrap;
+  }
+  .quit{
+    background-color: #f89406;
   }
 </style>
