@@ -48,7 +48,7 @@
         <button v-if="!participate" @click="joinWork" class="button create">
           Join
         </button>
-        <button v-else @click="quitWork" class="button quit">
+        <button v-if="participate" @click="quitWork" class="button quit">
           Leave
         </button>
         <div v-if="isCreator" class="button-container">
@@ -83,10 +83,19 @@
         showModal: false,
         participants: [],
         tags: [],
-        participate: false,
         isCreator: false,
         userId: 0,
         users: [],
+      }
+    },
+    computed: {
+      participate() {
+        console.log(this.project.users);
+        console.log(this.project.users.some( user => user.id === this.userId));
+        if (this.project.users === undefined) {
+          return false;
+        }
+        return this.project.users.some( user => user.id === this.userId);
       }
     },
     methods: {
@@ -96,35 +105,25 @@
       close() {
         this.$emit('close');
       },
-      checkIfParticipate() {
-        if (this.project.users === undefined) {
-          return;
-        }
-        let users = this.project.users;
-        for (let i = 0; i < users.length; i++) {
-          if (users[i].id === this.userId) {
-            this.participate = true;
-            return;
-          }
-        }
-      },
       joinWork() {
         http.post(`/works/${this.project.id}/users`, {
           "user_id": this.userId,
         }).then(response => {
           this.$store.dispatch('works/updateWork', response.data);
+          console.log("join")
+          console.log(this.project)
           this.close();
         });
       },
       quitWork() {
         http.delete(`/works/${this.project.id}/users/${this.userId}`, {}).then(response => {
           this.$store.dispatch('works/updateWork', response.data);
+          console.log("quit")
+          console.log(this.project)
           this.close();
         });
       },
       deleteProject() {
-        console.log(this.project);
-
         let addr = "/works/" + this.project.id;
         http.delete(addr).then(response => {
           //Yeah deleted
@@ -134,7 +133,6 @@
     mounted() {
       let user = this.$cookies.get("currentUser");
       this.userId = user.id;
-      this.checkIfParticipate();
       this.isCreator = this.userId === this.project.user_id;
     }
   }
