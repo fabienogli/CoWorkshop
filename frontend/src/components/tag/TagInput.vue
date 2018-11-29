@@ -138,8 +138,14 @@
     padding: 5px;
     border-radius: 3px;
   }
+  .item {
+    text-align: center;
+  }
   .item.selected{
     background-color: $accentColor;
+    color: $primaryColor;
+    border-radius: 4px;
+    padding: 1px 1px;
     cursor: pointer;
   }
   .input-container {
@@ -154,12 +160,13 @@
     background-color: $accentColor;
     border-radius: 4px;
     padding: 10px 10px;
+    color: $primaryColor;
   }
   .tag-input {
     padding: 10px 10px;
     -webkit-appearance: none;
     border: none;
-
+    width: 100%
   }
   .tag-input:focus {
     outline: none;

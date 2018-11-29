@@ -39,18 +39,18 @@
   @import "~@/styles/_variable";
 
   .project-preview {
-
+    padding: 8px 8px;
   }
   .project:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 5px 12px 24px 6px $primaryLightColor;
     cursor: pointer;
   }
 
   .container {
     padding: 4px 16px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 4px 4px 8px 3px $primaryLightColor;
     transition: 0.3s;
     border-radius: 23px;
-    border: 2px solid $accentColor;
   }
+
 </style>

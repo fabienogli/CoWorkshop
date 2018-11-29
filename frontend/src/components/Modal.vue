@@ -1,8 +1,8 @@
 <template>
   <div class="modal">
-    <transition name="modal" @keydown.esc="close">
+    <transition name="modal">
       <div class="modal-mask">
-        <div class="modal-wrapper"@click.prevent="close">
+        <div class="modal-wrapper" @click.prevent="close">
           <div class="modal-container" @click.stop="">
             <div class="modal-header">
               <slot name="header">

@@ -1,6 +1,6 @@
 <template>
   <div id="projects" class="projects">
-    <h1>Projects Component</h1>
+    <div class="information">Projects Component</div>
     <ProjectForm v-if="showModal" @close="showModal = false" @newProject="addWork"/>
     <ProjectList :projects="projects" @deleteProject="deleteProject"/>
     <br/>
@@ -49,5 +49,16 @@
   .projects {
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .button {
+    flex: 0 1 auto;
+    font-size: 30px;
+  }
+  .information {
+    font-size: 45px;
+    padding: 5px 0;
   }
 </style>
