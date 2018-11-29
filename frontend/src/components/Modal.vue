@@ -58,6 +58,7 @@
   .modal-header {
     font-size: 25px;
     color: $primaryText;
+    text-align: center;
   }
 
   .modal-container {

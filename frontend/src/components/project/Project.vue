@@ -1,21 +1,23 @@
 <template>
   <div id="project">
     <modal @close="close">
-      <div class="title" slot="header">
-        <h1 class="no-margin">
+      <div slot="header">
+        <h1>
           {{project.name}}
         </h1>
       </div>
       <div slot="body">
-        <div class="information creator">
+        <div class="information-container">
           <div class="information label">Creator</div>
-          {{project.user.pseudo}}
+          <div class="information">{{project.user.pseudo}}</div>
         </div>
-        <div class="information creator">
+        <div class="information-container">
           <div class="information label">Description</div>
-          {{project.desc}}
+          <div class="information">
+            {{project.desc}}
+          </div>
         </div>
-        <div v-if="project.users.length > 0" class="participants-container information">
+        <div v-if="project.users.length > 0" class="information-container">
           <div class="information label">Participants</div>
           <div class="participants">
             <div class="item-container" v-for="user in project.users">
@@ -25,15 +27,19 @@
             </div>
           </div>
         </div>
-        <div v-if="project.tags.length > 0" class="tags-container">
+        <div v-if="project.tags.length > 0" class="information-container">
           <div class="information">
             <div class="label">
               Tags
             </div>
           </div>
-          <div class="item-container" v-for="tag in project.tags">
-            <div class="tag">
-              {{tag.name}}
+          <div class="item-container">
+            <div class="tags">
+              <div class="tag-container" v-for="tag in project.tags">
+                <div class="tag">
+                  {{tag.name}}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -104,6 +110,7 @@
         http.post(addr, {
           "user_id": this.userId,
         }).then(response => {
+          this.$store.dispatch('works/updateWork', response.data);
           this.close();
         });
       },
@@ -136,26 +143,53 @@
   .tag {
     border: 1px solid $accentColor;
     background-color: $accentColor;
+    color: $primaryColor;
+    font-size: 18px;
     border-radius: 4px;
     padding: 10px 10px;
   }
 
-  .tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    text-align: center;
+  .tag-container {
+    padding: 2px 2px;
   }
 
   .participants {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+  .participant {
+    text-align: center;
+    font-size: 17px;
   }
 
-  .information {
-    flex: 0 0 100%;
+  .content {
+    flex: 1;
+  }
+
+  .information-container {
+    flex: 1;
+    border-radius: 4px;
+    padding: 10px 0;
+    .label {
+      font-size: 22px;
+      font-weight: bold;
+    }
+  }
+
+  .modal-body{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    text-align: center;
+    
   }
   .button-container {
     display: inline;
+  }
+
+  .tags{
+    display: flex;
+    flex-flow: row wrap;
   }
 </style>

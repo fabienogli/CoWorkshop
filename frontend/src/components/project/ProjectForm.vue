@@ -154,14 +154,17 @@
 <style lang="scss">
 
   .input {
-    width: 80%;
+    min-width: 80%;
     &::placeholder {
       font-size: 15px;
       text-align: center;
     }
+    font-size: 17px;
+    text-align: center;
   }
   .input-container {
     padding: 7px 0;
+    width: 100%;
   }
 
   .modal-body {
@@ -169,5 +172,6 @@
     flex-direction: column;
     align-items: center;
     flex-wrap: wrap;
+    flex-basis: auto;
   }
 </style>
