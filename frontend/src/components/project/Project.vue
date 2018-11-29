@@ -90,8 +90,6 @@
     },
     computed: {
       participate() {
-        console.log(this.project.users);
-        console.log(this.project.users.some( user => user.id === this.userId));
         if (this.project.users === undefined) {
           return false;
         }
@@ -110,16 +108,12 @@
           "user_id": this.userId,
         }).then(response => {
           this.$store.dispatch('works/updateWork', response.data);
-          console.log("join")
-          console.log(this.project)
           this.close();
         });
       },
       quitWork() {
         http.delete(`/works/${this.project.id}/users/${this.userId}`, {}).then(response => {
           this.$store.dispatch('works/updateWork', response.data);
-          console.log("quit")
-          console.log(this.project)
           this.close();
         });
       },
@@ -147,9 +141,8 @@
   }
 
   .tag {
-    border: 1px solid $accentColor;
-    background-color: $accentColor;
-    color: $primaryColor;
+    background-color: $capri;
+    color: $primaryDarkColor;
     font-size: 18px;
     border-radius: 4px;
     padding: 10px 10px;
@@ -197,6 +190,7 @@
   .tags{
     display: flex;
     flex-flow: row wrap;
+    justify-content: center;
   }
   .quit{
     background-color: #f89406;

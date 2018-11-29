@@ -143,8 +143,8 @@
     font-size: 17px
   }
   .item.selected{
-    background-color: $accentColor;
-    color: $primaryColor;
+    background-color: $capri;
+    color: $primaryDarkColor;
     border-radius: 4px;
     padding: 1px 1px;
     cursor: pointer;
@@ -157,11 +157,10 @@
     width: 80%;
   }
   .tag-selected {
-    border: 1px solid $accentColor;
-    background-color: $accentColor;
+    background-color: $capri;
     border-radius: 4px;
     padding: 10px 10px;
-    color: $primaryColor;
+    color: $primaryDarkColor;
     font-size: 17px;
   }
   .tag-input {
