@@ -1,17 +1,17 @@
 <template>
   <div id="projectForm">
     <modal @close="close">
-      <h1 slot="header" class="title">{{top}}</h1>
+      <h1 slot="header">{{top}}</h1>
       <div slot="body" class="modal-body">
         <div class="input-container">
-          <input class="input" placeholder="Name" id="name" v-model="name" type="text" name="name">
+          <input class="input" placeholder="Type the project name" id="name" v-model="name" type="text" name="name">
         </div>
         <div class="input-container">
-          <input class="input" placeholder="Description" id="desc" v-model="desc" type="text" name="desc">
+          <input class="input" placeholder="Type your project description" id="desc" v-model="desc" type="text" name="desc">
         </div>
         <TagInput :tags="tags" ref="tagInput"/>
       </div>
-      <button v-if="project.userId==0" slot="footer" class="modal-default-button button create" @click="create">
+      <button v-if="project.userId==0" slot="footer" class="button create" @click="create">
         Create
       </button>
       <button v-if="project.userId!=0" slot="footer" class="modal-default-button button create" @click="update">
@@ -155,11 +155,19 @@
 
   .input {
     width: 80%;
+    &::placeholder {
+      font-size: 15px;
+      text-align: center;
+    }
+  }
+  .input-container {
+    padding: 7px 0;
   }
 
   .modal-body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex-wrap: wrap;
   }
 </style>
