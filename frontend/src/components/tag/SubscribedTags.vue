@@ -1,7 +1,7 @@
 <template>
-  <div id="subscribedTags">
+  <div id="subscribedTags" class="subscribed-tags">
     <div class="subscription-container" v-if="subscriptions.length > 0" >
-      <h2>Subscriptions</h2>
+      <div class="information">Subscriptions</div>
       <tag-list :tags="subscriptions" :button="'Unsubscribe'" @action="unsubs" :design="'delete'" />
     </div>
   </div>
@@ -46,5 +46,7 @@
 </script>
 
 <style scoped>
-
+  .subscribed-tags {
+    padding: 10px;
+  }
 </style>
