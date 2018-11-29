@@ -93,11 +93,10 @@
     flex: 1;
   }
   .tag {
-    border: 1px solid $accentColor;
-    background-color: $accentColor;
+    background-color: $capri;
     border-radius: 4px;
     padding: 10px 10px;
-    color: $primaryColor;
+    color: $primaryDarkColor;
     font-size: 30px;
     text-align: center;
     box-shadow: 5px 8px 16px 0 $primaryLightColor;
