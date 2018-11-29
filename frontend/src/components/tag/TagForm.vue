@@ -45,9 +45,6 @@
         http.post("/tags", {
           "name": this.name,
         }).then(response => {
-          let tag = response.data;
-          this.$store.dispatch('tags/addTag', tag);
-          this.$store.dispatch('availableTags/add', tag);
           this.close();
         });
       }

@@ -81,7 +81,7 @@
       border-right: 1px solid $lightGrey;
       flex: 1;
       ;
-      max-height: 30px;
+      max-height: 50px;
       cursor: pointer;
       margin: 0;
       text-align: center;
