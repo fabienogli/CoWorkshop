@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <Alert :text="'Successfully subscribed'"/>
     <h1 class="title">{{ msg }}</h1>
     <div class="item-container">
       <div class="information">
@@ -23,13 +24,15 @@
 </template>
 
 <script>
+import Alert from '@/components/Alert';
+
   import http from '@/http';
   import ProjectList from '@/components/project/ProjectList'
   import TagList from "@/components/tag/TagList";
 
   export default {
     name: 'Home',
-    components: {ProjectList, TagList},
+    components: {ProjectList, TagList, Alert},
     data() {
       return {
         msg: 'CoWorkshop',
