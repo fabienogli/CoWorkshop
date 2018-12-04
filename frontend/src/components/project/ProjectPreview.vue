@@ -66,6 +66,7 @@
     box-shadow: 4px 4px 8px 3px $lightGrey;
     transition: 0.3s;
     border-radius: 23px;
+    min-height : 250px;
   }
 
   .tag {
